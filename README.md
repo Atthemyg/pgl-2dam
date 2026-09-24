@@ -12,6 +12,8 @@ Repositorio de actividades y proyectos del módulo de Programación multimedia y
 
 ### Tema 0. Introducción
 
+- [Tecnologías y extensiones para VSCode](tema-0-introduccion/README.md)
+
 - [Práctica 00. Iniciación a JavaScript](tema-0-introduccion/practica-00-iniciacion-javascript/README.md)
 
 ### UT1. Fundamentos y tecnologías para el desarrollo multiplataforma
