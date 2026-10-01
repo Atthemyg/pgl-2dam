@@ -1,0 +1,49 @@
+1. ¿Por qué escuchamos el evento submit del formulario?
+
+2. ¿Qué ocurriría si eliminamos evento.preventDefault()?
+
+3. ¿Para qué utilizamos trim() y toLowerCase()?
+
+4. ¿Por qué obtenerPokemon() está declarada con async?
+
+5. ¿Qué devuelve fetch()?
+
+6. ¿Para qué se utiliza await?
+
+7. ¿Por qué debemos comprobar respuesta.ok?
+
+8. ¿Qué hace respuesta.json()?
+
+9. ¿Por qué no devolvemos directamente todos los datos recibidos?
+
+10. ¿Qué resultado produce map() al transformar los tipos?
+
+11. ¿Por qué utilizamos join("") después de map()?
+
+12. ¿Qué diferencia existe entre try y catch?
+
+13. ¿Por qué hemos separado obtenerPokemon() y mostrarPokemon()?
+
+14. ¿Qué función cumple formatearId()?
+
+15. ¿Qué habría que modificar para mostrar varios Pokémon simultáneamente?
+
+
+## Lista de comprobación final
+
+He creado correctamente la estructura de carpetas.
+El HTML se abre mediante Live Server.
+El CSS se carga correctamente.
+Puedo enviar el formulario pulsando el botón.
+Puedo enviar el formulario pulsando Enter.
+La página no se recarga al buscar.
+La búsqueda elimina espacios y diferencia de mayúsculas.
+El campo vacío muestra un mensaje.
+Puedo consultar un Pokémon por nombre.
+Puedo consultar un Pokémon por número.
+La tarjeta muestra imagen, número, nombre, altura, peso y tipos.
+Los Pokémon con dos tipos muestran ambos.
+Una búsqueda inexistente muestra un error comprensible.
+No aparecen errores en rojo en la consola.
+He probado todos los casos indicados.
+He subido el resultado a mi repositorio.
