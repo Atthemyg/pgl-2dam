@@ -1,49 +1,80 @@
-1. ¿Por qué escuchamos el evento submit del formulario?
+## Preguntas de comprobación
 
-2. ¿Qué ocurriría si eliminamos evento.preventDefault()?
+**1. ¿Por qué escuchamos el evento submit del formulario?**
 
-3. ¿Para qué utilizamos trim() y toLowerCase()?
+Porque el evento submit se produce tanto al pulsar el botón Buscar como al presionar Enter dentro del campo.
 
-4. ¿Por qué obtenerPokemon() está declarada con async?
+**2. ¿Qué ocurriría si eliminamos evento.preventDefault()?**
 
-5. ¿Qué devuelve fetch()?
+El formulario realizaría su comportamiento predeterminado: enviaría los datos y recargaría la página.
 
-6. ¿Para qué se utiliza await?
+**3. ¿Para qué utilizamos trim() y toLowerCase()?**
 
-7. ¿Por qué debemos comprobar respuesta.ok?
+trim() elimina los espacios al principio y al final del texto, mientras que toLowerCase() convierte el texto a minúsculas. Así normalizamos la búsqueda.
 
-8. ¿Qué hace respuesta.json()?
+**4. ¿Por qué obtenerPokemon() está declarada con async?**
 
-9. ¿Por qué no devolvemos directamente todos los datos recibidos?
+Porque realiza operaciones asíncronas, concretamente una petición a la API, y una función async devuelve una promesa.
 
-10. ¿Qué resultado produce map() al transformar los tipos?
+**5. ¿Qué devuelve fetch()?**
 
-11. ¿Por qué utilizamos join("") después de map()?
+fetch() realiza una petición HTTP y devuelve una promesa con la respuesta de la petición.
 
-12. ¿Qué diferencia existe entre try y catch?
+**6. ¿Para qué se utiliza await?**
 
-13. ¿Por qué hemos separado obtenerPokemon() y mostrarPokemon()?
+Para esperar a que termine una operación asíncrona antes de continuar ejecutando el código dentro de la función.
 
-14. ¿Qué función cumple formatearId()?
+**7. ¿Por qué debemos comprobar respuesta.ok?**
 
-15. ¿Qué habría que modificar para mostrar varios Pokémon simultáneamente?
+Porque fetch() no considera automáticamente un error HTTP como el 404 una excepción. respuesta.ok permite comprobar si el código HTTP está entre 200 y 299 y detectar errores.
 
+**8. ¿Qué hace respuesta.json()?**
+
+Convierte la respuesta recibida en formato JSON en un objeto JavaScript que podemos utilizar en nuestro programa.
+
+**9. ¿Por qué no devolvemos directamente todos los datos recibidos?**
+
+Porque la API devuelve mucha más información de la que necesita nuestra tarjeta. Seleccionamos solamente los datos necesarios, haciendo el objeto más sencillo de manejar y evitando depender de toda la estructura de la API.
+
+**10. ¿Qué resultado produce map() al transformar los tipos?**
+
+Produce un nuevo array que contiene solamente los nombres de los tipos. Por ejemplo, ["fire", "flying"].
+
+**11. ¿Por qué utilizamos join("") después de map()?**
+
+Porque map() produce un array de elementos HTML y join("") los une en una sola cadena sin añadir comas entre ellos.
+
+**12. ¿Qué diferencia existe entre try y catch?**
+
+try contiene el código que puede producir un error. catch se ejecuta cuando se produce una excepción y permite recibir el error y mostrar su mensaje.
+
+**13. ¿Por qué hemos separado obtenerPokemon() y mostrarPokemon()?**
+
+Porque cada función tiene una responsabilidad diferente. obtenerPokemon() consulta la API y prepara los datos, mientras que mostrarPokemon() se encarga de crear y mostrar la tarjeta en la página. Esto hace que el código esté más organizado.
+
+**14. ¿Qué función cumple formatearId()?**
+
+Añade ceros delante del número de Pokémon hasta tener tres cifras. Por ejemplo, 25 se convierte en 025, para mostrarlo como N.º 025.
+
+**15. ¿Qué habría que modificar para mostrar varios Pokémon simultáneamente?**
+
+Habría que cambiar la aplicación para realizar varias búsquedas y no sustituir el contenido anterior de resultado, sino añadir las nuevas tarjetas. También habría que trabajar con un array de Pokémon y generar una tarjeta para cada uno. La práctica actual está diseñada para mostrar un Pokémon cada vez.
 
 ## Lista de comprobación final
 
-He creado correctamente la estructura de carpetas.
-El HTML se abre mediante Live Server.
-El CSS se carga correctamente.
-Puedo enviar el formulario pulsando el botón.
-Puedo enviar el formulario pulsando Enter.
-La página no se recarga al buscar.
-La búsqueda elimina espacios y diferencia de mayúsculas.
-El campo vacío muestra un mensaje.
-Puedo consultar un Pokémon por nombre.
-Puedo consultar un Pokémon por número.
-La tarjeta muestra imagen, número, nombre, altura, peso y tipos.
-Los Pokémon con dos tipos muestran ambos.
-Una búsqueda inexistente muestra un error comprensible.
-No aparecen errores en rojo en la consola.
-He probado todos los casos indicados.
-He subido el resultado a mi repositorio.
+- [x] He creado correctamente la estructura de carpetas.
+- [x] El HTML se abre mediante Live Server.
+- [x] El CSS se carga correctamente.
+- [x] Puedo enviar el formulario pulsando el botón.
+- [x] Puedo enviar el formulario pulsando Enter.
+- [x] La página no se recarga al buscar.
+- [x] La búsqueda elimina espacios y diferencia de mayúsculas.
+- [x] El campo vacío muestra un mensaje.
+- [x] Puedo consultar un Pokémon por nombre.
+- [x] Puedo consultar un Pokémon por número.
+- [x] La tarjeta muestra imagen, número, nombre, altura, peso y tipos.
+- [x] Los Pokémon con dos tipos muestran ambos.
+- [x] Una búsqueda inexistente muestra un error comprensible.
+- [x] No aparecen errores en rojo en la consola.
+- [x] He probado todos los casos indicados.
+- [x] He subido el resultado a mi repositorio.
