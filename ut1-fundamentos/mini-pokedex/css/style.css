@@ -95,10 +95,37 @@ h1 {
   box-shadow: 0 8px 25px rgb(0 0 0 / 10%);
 }
 
-.pokemon__imagen {
+.galeria_pokemon {
+  display: grid;
   width: 180px;
   height: 180px;
   image-rendering: pixelated;
+  margin: 0 auto;
+}
+
+.pokemon__imagen_back, 
+.pokemon__imagen_front {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  image-rendering: pixelated;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.pokemon__imagen_back {
+  opacity: 1;
+}
+
+.pokemon__imagen_front {
+  opacity: 0;
+}
+
+.pokemon:hover .pokemon__imagen_front {
+  opacity: 1;
+}
+
+.pokemon:hover .pokemon__imagen_back {
+  opacity: 0;
 }
 
 .pokemon__nombre {

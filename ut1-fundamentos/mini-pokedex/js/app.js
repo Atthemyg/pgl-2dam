@@ -16,7 +16,8 @@ const obtenerPokemon = async (busqueda) => {
   return {
     id: datos.id,
     nombre: datos.name,
-    imagen: datos.sprites.back_default,
+    imagenBack: datos.sprites.back_default,
+    imagenFront: datos.sprites.front_default,
     altura: datos.height,
     peso: datos.weight,
     tipos: datos.types.map(({ type }) => type.name),
@@ -36,11 +37,18 @@ const mostrarPokemon = (pokemon) => {
     <article class="pokemon">
       <p class="pokemon__numero">N.º ${formatearId(pokemon.id)}</p>
 
+      <div class="galeria_pokemon">
       <img
-        class="pokemon__imagen"
-        src="${pokemon.imagen}"
-        alt="Imagen de ${pokemon.nombre}"
+        class="pokemon__imagen_back"
+        src="${pokemon.imagenBack}"
+        alt="Imagen trasera de ${pokemon.nombre}"
       >
+      <img
+        class="pokemon__imagen_front"
+        src="${pokemon.imagenFront}"
+        alt="Imagen frontal de ${pokemon.nombre}"
+      >
+      </div>
 
       <h2 class="pokemon__nombre">${pokemon.nombre}</h2>
 

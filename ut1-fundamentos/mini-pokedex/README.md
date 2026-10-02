@@ -83,3 +83,21 @@ Commits de este punto de partida:
 https://github.com/Atthemyg/pgl-2dam/commit/17fb5001003414a78b19f438b13954b100ede130
 
 https://github.com/Atthemyg/pgl-2dam/commit/4083b9295523b92f6cc9857e3b749898707f7aff
+
+
+## 2. Cambio de sprite
+
+
+
+```
+<div class="galeria_pokemon">
+      <img
+        class="pokemon__imagen_back"
+        src="${pokemon.imagenBack}"
+        alt="Imagen trasera de ${pokemon.nombre}">
+      <img
+        class="pokemon__imagen_front"
+        src="${pokemon.imagenFront}"
+        alt="Imagen frontal de ${pokemon.nombre}">
+</div>
+```
