@@ -1932,3 +1932,146 @@ Esto lo complementaremos con el CSS:
 ![](../pokedex/assets/img/12.png)
 
 ![](../pokedex/assets/img/13.png)
+
+
+
+## 7. Estados y gestión de errores
+
+Nuestra aplicación va a contemplar estos estados:
+
+- Aplicación preparada para comenzar.
+- Datos cargándose.
+- Datos cargados correctamente.
+- Búsqueda sin resultados.
+- Error al comunicarse con PokéAPI.
+
+Y si se producen errores:
+
+- Se mostrará un mensaje comprensible.
+- La aplicación no se quedará bloqueada.
+- El usuario deberá poder volver a intentarlo.
+
+<br>
+
+Primero vamos a modificar el mensaje inicial para que la aplicación indique que está preparada para comenzar:
+
+`<p id="mensaje" class="mensaje" aria-live="polite">Aplicación preparada.</p>`
+
+Cuando se abre la página, el usuario verá: "Aplicación preparada"
+
+El estado de carga ya lo tenemos en `iniciarApp()`: `mensaje.textContent = "Cargando Pokémon...";`
+
+Mientras `obtenerPokemons()` está esperando la respuesta de PokéAPI, se muestra: "Cargando Pokémon..."
+
+Actualmente, después de cargar los Pokémon tenemos `mensaje.textContent = "";
+mostrarPokemons(pokemons);`. Para que el usuario sepa que los datos se han cargado correctamente, podemos mostrar: `mensaje.textContent = "Pokémon cargados correctamente.";`.
+
+Para mejorar la gestión del error `catch (error) {
+  mensaje.textContent = error.message;
+}` es mejor que controlemos nosotros mismos el mensaje que verá el usuario: `catch (error) {
+  mensaje.textContent =
+    "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo.";
+}`
+
+Si queremos que la aplicación no se quede bloqueada después de un error, añadiremos un botón en el HTML:
+
+```
+<p id="mensaje" class="mensaje" aria-live="polite">
+  Aplicación preparada.
+</p>
+
+<button id="boton-reintentar" type="button" hidden>
+  Volver a intentarlo
+</button>
+```
+
+y lo referenciaremos en la `app.js` con: `const botonReintentar = document.querySelector("#boton-reintentar");`.
+Para mostrarlo cuando se produzca el error añadimos en `iniciarApp()`:
+
+```
+const iniciarApp = async () => {
+  try {
+    mensaje.textContent = "Cargando Pokémon...";
+    botonReintentar.hidden = true;
+
+    pokemons = await obtenerPokemons();
+
+    cargarTipos(pokemons);
+
+    mensaje.textContent = "Pokémon cargados correctamente.";
+    mostrarPokemons(pokemons);
+  } catch (error) {
+    mensaje.textContent =
+      "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo.";
+
+    botonReintentar.hidden = false;
+  }
+};
+```
+
+y añadimos: `botonReintentar.addEventListener("click", iniciarApp);` para que funcione.
+
+<br>
+
+La búsqueda sin resultados ya la tenemos implementada en `filtrarPokemons()`
+
+```
+if (coincidencias.length === 0) {
+  mensaje.textContent = "No se ha encontrado ningún Pokémon.";
+  resultado.innerHTML = "";
+  return;
+}
+```
+
+<br>
+
+La función final queda:
+
+```
+const iniciarApp = async () => {
+  try {
+    mensaje.textContent = "Cargando Pokémon...";
+    botonReintentar.hidden = true;
+
+    pokemons = await obtenerPokemons();
+
+    cargarTipos(pokemons);
+
+    mensaje.textContent = "Pokémon cargados correctamente.";
+    mostrarPokemons(pokemons);
+  } catch (error) {
+    mensaje.textContent =
+      "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo.";
+
+    botonReintentar.hidden = false;
+  }
+};
+
+botonReintentar.addEventListener("click", iniciarApp);
+```
+
+Por último, para que el botón de reintento tenga el mismo estilo general de la aplicación, añadimos al CSS:
+
+```
+#boton-reintentar {
+  display: block;
+  margin: 1rem auto 0;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+#boton-reintentar[hidden] {
+  display: none;
+}
+```
+
+![](../pokedex/assets/img/16.png)
+
+![](../pokedex/assets/img/14.png)
+
+![](../pokedex/assets/img/15.png)
+
+![](../pokedex/assets/img/17.png)

@@ -4,6 +4,7 @@ const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
 const filtroTipo = document.querySelector("#filtro-tipo");
 const panelDetalles = document.querySelector("#panel-detalles");
+const botonReintentar = document.querySelector("#boton-reintentar");
 
 let pokemons = [];
 
@@ -257,16 +258,22 @@ filtroTipo.addEventListener("change", filtrarPokemons);
 const iniciarApp = async () => {
   try {
     mensaje.textContent = "Cargando Pokémon...";
+    botonReintentar.hidden = true;
 
     pokemons = await obtenerPokemons();
 
     cargarTipos(pokemons);
 
-    mensaje.textContent = "";
+    mensaje.textContent = "Pokémon cargados correctamente.";
     mostrarPokemons(pokemons);
   } catch (error) {
-    mensaje.textContent = error.message;
+    mensaje.textContent =
+      "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo.";
+
+    botonReintentar.hidden = false;
   }
 };
+
+botonReintentar.addEventListener("click", iniciarApp);
 
 iniciarApp();
