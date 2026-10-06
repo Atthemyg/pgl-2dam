@@ -4,8 +4,9 @@
 
 Para comenzar el proyecto he creado una mini-pokedex inicial que contiene un html y css sencillos, y una app.js que se conecta a [PokéAPI](https://pokeapi.co/) y realiza la búsqueda de un Pokémon devolviendo algunos de sus datos.
 
-![](../mini-pokedex/assets/img/2.png)
-![](../mini-pokedex/assets/img/1.png)
+![](../pokedex/assets/img/2.png)
+
+![](../pokedex/assets/img/1.png)
 
 
 ### Estructura de carpetas y archivos inicial
@@ -74,8 +75,9 @@ const respuesta = await fetch(url);```
 La app también gestiona Pokémon inexistentes y otros errores controlados como al pulsar el botón de "Buscar" sin haber introducido nada en la barra de búsqueda.
 
 
-![](../mini-pokedex/assets/img/4.png)
-![](../mini-pokedex/assets/img/3.png)
+![](../pokedex/assets/img/4.png)
+
+![](../pokedex/assets/img/3.png)
 
 
 Commits de este punto de partida: 
@@ -148,7 +150,7 @@ body {
 
 <br>
 
-![](../mini-pokedex/assets/img/5.png)
+![](../pokedex/assets/img/5.png)
 
 
 
@@ -222,9 +224,9 @@ Por último, modifico el css para que las imágenes queden superpuestas en la mi
 ```
 <br>
 
-![](../mini-pokedex/assets/img/6.png)
+![](../pokedex/assets/img/6.png)
 
-![](../mini-pokedex/assets/img/7.png)
+![](../pokedex/assets/img/7.png)
 
 
 ## 4. Barra de búsqueda
@@ -619,9 +621,9 @@ Con este apartado hecho, nuestra app:
 
 <br>
 
-![](../mini-pokedex/assets/img/8.png)
+![](../pokedex/assets/img/8.png)
 
-![](../mini-pokedex/assets/img/9.png)
+![](../pokedex/assets/img/9.png)
 
 
 ## 5. Información ampliada
@@ -774,7 +776,7 @@ El HTML quedaría:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini-Pokédex</title>
+  <title>Pokédex</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -1435,3 +1437,7 @@ y añadí el CSS correspondiente:
   font-weight: bold;
 }
 ```
+
+![](../pokedex/assets/img/10.png)
+
+![](../pokedex/assets/img/11.png)
