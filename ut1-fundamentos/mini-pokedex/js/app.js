@@ -2,6 +2,8 @@ const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
+const filtroTipo = document.querySelector("#filtro-tipo");
+const panelDetalles = document.querySelector("#panel-detalles");
 
 let pokemons = [];
 
@@ -27,6 +29,12 @@ const obtenerPokemons = async () => {
         altura: datosPokemon.height,
         peso: datosPokemon.weight,
         tipos: datosPokemon.types.map(({ type }) => type.name),
+        experiencia: datosPokemon.base_experience,
+        habilidades: datosPokemon.abilities.map(({ ability }) => ability.name),
+        estadisticas: datosPokemon.stats.map(({ base_stat, stat }) => ({
+          nombre: stat.name,
+          valor: base_stat,
+        })),
       };
 
     })
@@ -73,11 +81,108 @@ const mostrarPokemons = (pokemons) => {
           <div class="pokemon__tipos">
             ${tiposHTML}
           </div>
+          <div class="boton_detalles">
+            <button class="boton-detalles" data-id="${pokemon.id}">
+              Ver detalles
+            </button>
+          </div>
         </article>
       `;
     })
     .join("");
 };
+
+const mostrarDetalles = (pokemon) => {
+  const tiposHTML = pokemon.tipos
+    .map((tipo) => `<span class="tipo">${tipo}</span>`)
+    .join("");
+
+
+  const habilidadesHTML = pokemon.habilidades
+    .map((habilidad) => `<li>${habilidad}</li>`)
+    .join("");
+
+  const estadisticasHTML = pokemon.estadisticas
+    .map(
+      (estadistica) => `
+        <li>
+          <strong>${estadistica.nombre}</strong>: ${estadistica.valor}
+        </li>
+      `
+    )
+    .join("");
+
+  panelDetalles.innerHTML = `
+    <div class="panel-detalles__contenido">
+      <button class="panel-detalles__cerrar" type="button">
+        Cerrar
+      </button>
+
+      <p>N.º ${formatearId(pokemon.id)}</p>
+
+      <h2>${pokemon.nombre}</h2>
+
+      <img
+        src="${pokemon.imagenFront}"
+        alt="Imagen frontal de ${pokemon.nombre}"
+        class="panel-detalles__imagen"
+      >
+
+      <div class="pokemon__tipos">
+        ${tiposHTML}
+      </div>
+
+      <div class="panel-detalles__datos">
+      <div>
+        <strong>Altura</strong>
+        <span>${pokemon.altura / 10} m</span>
+      </div>
+
+      <div>
+        <strong>Peso</strong>
+        <span>${pokemon.peso / 10} kg</span>
+      </div>
+
+      <div>
+        <strong>Experiencia</strong>
+        <span>${pokemon.experiencia}</span>
+      </div>
+    </div>
+
+      <h3>Habilidades</h3>
+      <ul>
+        ${habilidadesHTML}
+      </ul>
+
+      <h3>Estadísticas base</h3>
+      <ul>
+        ${estadisticasHTML}
+      </ul>
+    </div>
+  `;
+
+  panelDetalles.hidden = false;
+};
+
+resultado.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("boton-detalles")) {
+    return;
+  }
+
+  const id = Number(evento.target.dataset.id);
+
+  const pokemon = pokemons.find((pokemon) => pokemon.id === id);
+
+  mostrarDetalles(pokemon);
+});
+
+panelDetalles.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("panel-detalles__cerrar")) {
+    return;
+  }
+
+  panelDetalles.hidden = true;
+});
 
 const filtrarPokemons = () => {
   const busqueda = inputBusqueda.value.trim().toLowerCase();

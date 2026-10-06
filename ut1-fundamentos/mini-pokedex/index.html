@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini-Pokédex</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
   <main class="contenedor">
 
     <header class="encabezado">
-      <img
-        src="assets/img/encabezado.png"
-        alt="Encabezado de la Pokédex"
-        class="encabezado__imagen"
-      >
+      <img src="assets/img/encabezado.png" alt="Encabezado de la Pokédex" class="encabezado__imagen">
     </header>
 
     <p class="introduccion">
@@ -25,23 +23,20 @@
       <label for="busqueda">Nombre o número</label>
 
       <div class="buscador__controles">
-        <input
-          id="busqueda"
-          name="busqueda"
-          type="text"
-          placeholder="Ejemplo: pikachu o 25"
-          autocomplete="off"
-        >
+        <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: pikachu o 25" autocomplete="off">
 
         <button type="submit">Buscar</button>
+
       </div>
     </form>
 
     <p id="mensaje" class="mensaje" aria-live="polite"></p>
 
     <section id="resultado" class="resultado"></section>
+    <div id="panel-detalles" class="panel-detalles" hidden></div>
   </main>
 
   <script src="js/app.js"></script>
 </body>
+
 </html>

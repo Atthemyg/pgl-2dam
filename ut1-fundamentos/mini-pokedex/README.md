@@ -623,3 +623,815 @@ Con este apartado hecho, nuestra app:
 
 ![](../mini-pokedex/assets/img/9.png)
 
+
+## 5. Información ampliada
+
+Para que nuestra Pokédex quede más completa, vamos a añadir un botón "Ver detalles" que nos ampliará la información de cada uno de los Pokémon.
+
+Lo primero que haremos es añadir nuevos datos a la petición de la API. En la función `obtenerPokemons()` ampliaremos el objeto que devuelve la API con tres propiedades nuevas:
+
+```
+experiencia: datosPokemon.base_experience,
+
+habilidades: datosPokemon.abilities.map(({ ability }) => ability.name),
+
+estadisticas: datosPokemon.stats.map(({ base_stat, stat }) => ({
+  nombre: stat.name,
+  valor: base_stat,
+})),
+```
+
+`experiencia: datosPokemon.base_experience,` guarda la experiencia base del Pokémon, obtenida de `base_experience`.
+
+`habilidades: datosPokemon.abilities.map(({ ability }) => ability.name),` obtiene los nombres de todas las habilidades del Pokémon. Utilizamos `.map()` para recorrer las habilidades y quedarnos únicamente con sus nombres.
+
+`estadisticas: datosPokemon.stats.map(({ base_stat, stat }) => ({
+  nombre: stat.name,
+  valor: base_stat,
+})),` obtiene las estadísticas base del Pokémon. Cada estadística se guarda como un objeto con dos propiedades:
+
+`nombre`: el nombre de la estadística.
+
+`valor`: el valor numérico de esa estadística.
+
+Así podremos mostrar estadísticas como `hp`, `attack`, `defense`, `special-attack`, `special-defense` y `speed`.
+
+La función completa quedaría así:
+
+```
+const obtenerPokemons = async () => {
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=151`);
+
+  if (!respuesta.ok) {
+    throw new Error("No se han podido cargar los Pokémon.");
+  }
+
+  const datos = await respuesta.json();
+
+  const pokemons = await Promise.all(
+    datos.results.map(async (pokemon) => {
+      const respuestaPokemon = await fetch(pokemon.url);
+      const datosPokemon = await respuestaPokemon.json();
+
+      return {
+        id: datosPokemon.id,
+        nombre: datosPokemon.name,
+        imagenBack: datosPokemon.sprites.back_default,
+        imagenFront: datosPokemon.sprites.front_default,
+        altura: datosPokemon.height,
+        peso: datosPokemon.weight,
+        tipos: datosPokemon.types.map(({ type }) => type.name),
+        experiencia: datosPokemon.base_experience,
+        habilidades: datosPokemon.abilities.map(({ ability }) => ability.name),
+        estadisticas: datosPokemon.stats.map(({ base_stat, stat }) => ({
+          nombre: stat.name,
+          valor: base_stat,
+        })),
+      };
+```
+
+<br>
+
+A continuación, vamos a añadir el botón «Ver detalles» a cada tarjeta.
+Dentro de la función `mostrarPokemons()`, añadiremos este bloque al HTML que se genera para cada Pokémon:
+
+```
+<div class="boton_detalles">
+  <button class="boton-detalles" data-id="${pokemon.id}">
+    Ver detalles
+  </button>
+</div>
+```
+
+El atributo `data-id` es muy importante porque permite saber qué Pokémon ha seleccionado el usuario.
+
+Por ejemplo, el botón de Bulbasaur guarda el identificador `1`, mientras que el de Ivysaur guarda el `2`.
+
+La función completa:
+
+```
+const mostrarPokemons = (pokemons) => {
+  resultado.innerHTML = pokemons
+    .map((pokemon) => {
+      const tiposHTML = pokemon.tipos
+        .map((tipo) => `<span class="tipo">${tipo}</span>`)
+        .join("");
+
+      return `
+        <article class="pokemon">
+          <p class="pokemon__numero">N.º ${formatearId(pokemon.id)}</p>
+
+          <div class="galeria_pokemon">
+            <img
+              class="pokemon__imagen_back"
+              src="${pokemon.imagenBack}"
+              alt="Imagen trasera de ${pokemon.nombre}"
+            >
+
+            <img
+              class="pokemon__imagen_front"
+              src="${pokemon.imagenFront}"
+              alt="Imagen frontal de ${pokemon.nombre}"
+            >
+          </div>
+
+          <h2 class="pokemon__nombre">${pokemon.nombre}</h2>
+
+          <div class="pokemon__datos">
+            <p><strong>Altura</strong><br>${pokemon.altura / 10} m</p>
+            <p><strong>Peso</strong><br>${pokemon.peso / 10} kg</p>
+          </div>
+
+          <div class="pokemon__tipos">
+            ${tiposHTML}
+          </div>
+          <div class="boton_detalles">
+            <button class="boton-detalles" data-id="${pokemon.id}">
+              Ver detalles
+            </button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+};
+```
+
+Ahora todas las tarjetas tienen un botón para consultar su información ampliada.
+
+<br>
+
+Añadiremos el contenedor del panel al `index.html` dentro del contenedor principal, antes de cargar el archivo JavaScript:
+
+`<div id="panel-detalles" class="panel-detalles" hidden></div>`
+
+El HTML quedaría:
+
+```
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini-Pokédex</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <main class="contenedor">
+
+    <header class="encabezado">
+      <img src="assets/img/encabezado.png" alt="Encabezado de la Pokédex" class="encabezado__imagen">
+    </header>
+
+    <p class="introduccion">
+      Introduce el nombre o el número de un Pokémon para obtener su información.
+    </p>
+
+    <form id="formulario-busqueda" class="buscador">
+      <label for="busqueda">Nombre o número</label>
+
+      <div class="buscador__controles">
+        <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: pikachu o 25" autocomplete="off">
+
+        <button type="submit">Buscar</button>
+
+      </div>
+    </form>
+
+    <p id="mensaje" class="mensaje" aria-live="polite"></p>
+
+    <section id="resultado" class="resultado"></section>
+    <div id="panel-detalles" class="panel-detalles" hidden></div>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>
+```
+
+<br>
+
+Para que JavaScript pueda modificar el contenido, mostrarlo y ocultarlo tenemos que seleccionar el panel al principio de la `app.js`:
+
+`const panelDetalles = document.querySelector("#panel-detalles");`
+
+Esta instrucción busca el elemento HTML que tiene el identificador `panel-detalles` y guarda una referencia a él.
+
+```
+const formulario = document.querySelector("#formulario-busqueda");
+const inputBusqueda = document.querySelector("#busqueda");
+const mensaje = document.querySelector("#mensaje");
+const resultado = document.querySelector("#resultado");
+const filtroTipo = document.querySelector("#filtro-tipo");
+const panelDetalles = document.querySelector("#panel-detalles");
+```
+
+<br>
+
+Para mostrar la información ampliada crearemos la función `const mostrarDetalles = (pokemon) => {` que recibe como parámetro el Pokémon del que queremos mostrar la información.
+
+Recorreremos los tipos del Pokémon y generaremos un elemento HTML para cada uno, por ejemplo, si un Pokémon tiene dos tipos, se muestran dos etiquetas:
+
+```
+const tiposHTML = pokemon.tipos
+  .map((tipo) => `<span class="tipo">${tipo}</span>`)
+  .join("");
+```
+
+También, recorreremos las habilidades y crearemos un elemento `<li>` para cada una, así podemos mostrar todas las habilidades del Pokémon dentro de una lista:
+
+```
+const habilidadesHTML = pokemon.habilidades
+  .map((habilidad) => `<li>${habilidad}</li>`)
+  .join("");
+```
+
+Haremos lo mismo con las estadísticas, recorreremos las estadísticas y mostraremos su nombre junto con su valor:
+
+```
+const estadisticasHTML = pokemon.estadisticas
+  .map(
+    (estadistica) => `
+      <li>
+        <strong>${estadistica.nombre}</strong>: ${estadistica.valor}
+      </li>
+    `
+  )
+  .join("");
+```
+
+Por último, utilizaremos `innerHTML` para introducir el contenido del panel y un botón de "Cerrar":
+
+```
+panelDetalles.innerHTML = `
+    <div class="panel-detalles__contenido">
+      <button class="panel-detalles__cerrar" type="button">
+        Cerrar
+      </button>
+
+      <p>N.º ${formatearId(pokemon.id)}</p>
+
+      <h2>${pokemon.nombre}</h2>
+
+      <img
+        src="${pokemon.imagenFront}"
+        alt="Imagen frontal de ${pokemon.nombre}"
+        class="panel-detalles__imagen"
+      >
+
+      <div class="pokemon__tipos">
+        ${tiposHTML}
+      </div>
+
+      <div class="panel-detalles__datos">
+      <div>
+        <strong>Altura</strong>
+        <span>${pokemon.altura / 10} m</span>
+      </div>
+
+      <div>
+        <strong>Peso</strong>
+        <span>${pokemon.peso / 10} kg</span>
+      </div>
+
+      <div>
+        <strong>Experiencia</strong>
+        <span>${pokemon.experiencia}</span>
+      </div>
+    </div>
+
+      <h3>Habilidades</h3>
+      <ul>
+        ${habilidadesHTML}
+      </ul>
+
+      <h3>Estadísticas base</h3>
+      <ul>
+        ${estadisticasHTML}
+      </ul>
+    </div>
+  `;
+```
+
+Al final añadimos `panelDetalles.hidden = false;` para eliminar el estado oculto del panel y permitir que se vea en pantalla.
+
+Por tanto, cada vez que llamamos a `mostrarDetalles(pokemon)`, se generará la información del Pokémon y se mostrará el panel:
+
+```
+const mostrarDetalles = (pokemon) => {
+  const tiposHTML = pokemon.tipos
+    .map((tipo) => `<span class="tipo">${tipo}</span>`)
+    .join("");
+
+
+  const habilidadesHTML = pokemon.habilidades
+    .map((habilidad) => `<li>${habilidad}</li>`)
+    .join("");
+
+  const estadisticasHTML = pokemon.estadisticas
+    .map(
+      (estadistica) => `
+        <li>
+          <strong>${estadistica.nombre}</strong>: ${estadistica.valor}
+        </li>
+      `
+    )
+    .join("");
+
+  panelDetalles.innerHTML = `
+    <div class="panel-detalles__contenido">
+      <button class="panel-detalles__cerrar" type="button">
+        Cerrar
+      </button>
+
+      <p>N.º ${formatearId(pokemon.id)}</p>
+
+      <h2>${pokemon.nombre}</h2>
+
+      <img
+        src="${pokemon.imagenFront}"
+        alt="Imagen frontal de ${pokemon.nombre}"
+        class="panel-detalles__imagen"
+      >
+
+      <div class="pokemon__tipos">
+        ${tiposHTML}
+      </div>
+
+      <div class="panel-detalles__datos">
+      <div>
+        <strong>Altura</strong>
+        <span>${pokemon.altura / 10} m</span>
+      </div>
+
+      <div>
+        <strong>Peso</strong>
+        <span>${pokemon.peso / 10} kg</span>
+      </div>
+
+      <div>
+        <strong>Experiencia</strong>
+        <span>${pokemon.experiencia}</span>
+      </div>
+    </div>
+
+      <h3>Habilidades</h3>
+      <ul>
+        ${habilidadesHTML}
+      </ul>
+
+      <h3>Estadísticas base</h3>
+      <ul>
+        ${estadisticasHTML}
+      </ul>
+    </div>
+  `;
+
+  panelDetalles.hidden = false;
+};
+```
+
+<br>
+
+Para que el botón "Ver detalles" funcione hay que añadir un evento `click` al contenedor de las tarjetas:
+
+```
+resultado.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("boton-detalles")) {
+    return;
+  }
+
+  const id = Number(evento.target.dataset.id);
+
+  const pokemon = pokemons.find((pokemon) => pokemon.id === id);
+
+  mostrarDetalles(pokemon);
+});
+```
+
+`resultado.addEventListener("click", (evento) => {` escucha los clics que se producen dentro del contenedor de resultados.
+
+`if (!evento.target.classList.contains("boton-detalles")) {
+  return;
+}` comprueba que se ha pulsado el botón correcto. Esto evita que se abra el panel al pulsar otras partes de la tarjeta.
+
+`const id = Number(evento.target.dataset.id);` lee el valor guardado en `data-id` y lo convierte a número.
+
+`const pokemon = pokemons.find((pokemon) => pokemon.id === id);` utiliza `.find()` para localizar dentro del array `pokemons` el Pokémon cuyo identificador coincide con el del botón.
+
+`mostrarDetalles(pokemon);` pasa el Pokémon encontrado a la función que construye y muestra el panel con los detalles.
+
+<br>
+
+Por otro lado, tenemos que añadir igualmente una función que cierre el panel para permitir que el usuario cierre la ventana sin recargar la página. Esta comprueba si el elemento pulsado tiene la clase `panel-detalles__cerrar`, si es así se establece `hidden = true` y se oculta el panel:
+
+```
+panelDetalles.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("panel-detalles__cerrar")) {
+    return;
+  }
+
+  panelDetalles.hidden = true;
+});
+```
+
+Toda la clase `app.js` tiene que quedar así:
+
+```
+const formulario = document.querySelector("#formulario-busqueda");
+const inputBusqueda = document.querySelector("#busqueda");
+const mensaje = document.querySelector("#mensaje");
+const resultado = document.querySelector("#resultado");
+const filtroTipo = document.querySelector("#filtro-tipo");
+const panelDetalles = document.querySelector("#panel-detalles");
+
+let pokemons = [];
+
+const obtenerPokemons = async () => {
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=151`);
+
+  if (!respuesta.ok) {
+    throw new Error("No se han podido cargar los Pokémon.");
+  }
+
+  const datos = await respuesta.json();
+
+  const pokemons = await Promise.all(
+    datos.results.map(async (pokemon) => {
+      const respuestaPokemon = await fetch(pokemon.url);
+      const datosPokemon = await respuestaPokemon.json();
+
+      return {
+        id: datosPokemon.id,
+        nombre: datosPokemon.name,
+        imagenBack: datosPokemon.sprites.back_default,
+        imagenFront: datosPokemon.sprites.front_default,
+        altura: datosPokemon.height,
+        peso: datosPokemon.weight,
+        tipos: datosPokemon.types.map(({ type }) => type.name),
+        experiencia: datosPokemon.base_experience,
+        habilidades: datosPokemon.abilities.map(({ ability }) => ability.name),
+        estadisticas: datosPokemon.stats.map(({ base_stat, stat }) => ({
+          nombre: stat.name,
+          valor: base_stat,
+        })),
+      };
+
+    })
+  )
+  return pokemons;
+};
+
+const formatearId = (id) => {
+  return String(id).padStart(3, "0");
+};
+
+const mostrarPokemons = (pokemons) => {
+  resultado.innerHTML = pokemons
+    .map((pokemon) => {
+      const tiposHTML = pokemon.tipos
+        .map((tipo) => `<span class="tipo">${tipo}</span>`)
+        .join("");
+
+      return `
+        <article class="pokemon">
+          <p class="pokemon__numero">N.º ${formatearId(pokemon.id)}</p>
+
+          <div class="galeria_pokemon">
+            <img
+              class="pokemon__imagen_back"
+              src="${pokemon.imagenBack}"
+              alt="Imagen trasera de ${pokemon.nombre}"
+            >
+
+            <img
+              class="pokemon__imagen_front"
+              src="${pokemon.imagenFront}"
+              alt="Imagen frontal de ${pokemon.nombre}"
+            >
+          </div>
+
+          <h2 class="pokemon__nombre">${pokemon.nombre}</h2>
+
+          <div class="pokemon__datos">
+            <p><strong>Altura</strong><br>${pokemon.altura / 10} m</p>
+            <p><strong>Peso</strong><br>${pokemon.peso / 10} kg</p>
+          </div>
+
+          <div class="pokemon__tipos">
+            ${tiposHTML}
+          </div>
+          <div class="boton_detalles">
+            <button class="boton-detalles" data-id="${pokemon.id}">
+              Ver detalles
+            </button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+};
+
+const mostrarDetalles = (pokemon) => {
+  const tiposHTML = pokemon.tipos
+    .map((tipo) => `<span class="tipo">${tipo}</span>`)
+    .join("");
+
+
+  const habilidadesHTML = pokemon.habilidades
+    .map((habilidad) => `<li>${habilidad}</li>`)
+    .join("");
+
+  const estadisticasHTML = pokemon.estadisticas
+    .map(
+      (estadistica) => `
+        <li>
+          <strong>${estadistica.nombre}</strong>: ${estadistica.valor}
+        </li>
+      `
+    )
+    .join("");
+
+  panelDetalles.innerHTML = `
+    <div class="panel-detalles__contenido">
+      <button class="panel-detalles__cerrar" type="button">
+        Cerrar
+      </button>
+
+      <p>N.º ${formatearId(pokemon.id)}</p>
+
+      <h2>${pokemon.nombre}</h2>
+
+      <img
+        src="${pokemon.imagenFront}"
+        alt="Imagen frontal de ${pokemon.nombre}"
+        class="panel-detalles__imagen"
+      >
+
+      <div class="pokemon__tipos">
+        ${tiposHTML}
+      </div>
+
+      <div class="panel-detalles__datos">
+      <p><strong>Altura:</strong> ${pokemon.altura / 10} m</p>
+      <p><strong>Peso:</strong> ${pokemon.peso / 10} kg</p>
+      <p><strong>Experiencia base:</strong> ${pokemon.experiencia}</p>
+    </div>
+
+      <h3>Habilidades</h3>
+      <ul>
+        ${habilidadesHTML}
+      </ul>
+
+      <h3>Estadísticas base</h3>
+      <ul>
+        ${estadisticasHTML}
+      </ul>
+    </div>
+  `;
+
+  panelDetalles.hidden = false;
+};
+
+resultado.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("boton-detalles")) {
+    return;
+  }
+
+  const id = Number(evento.target.dataset.id);
+
+  const pokemon = pokemons.find((pokemon) => pokemon.id === id);
+
+  mostrarDetalles(pokemon);
+});
+
+panelDetalles.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("panel-detalles__cerrar")) {
+    return;
+  }
+
+  panelDetalles.hidden = true;
+});
+
+const filtrarPokemons = () => {
+  const busqueda = inputBusqueda.value.trim().toLowerCase();
+
+  if (!busqueda) {
+    mensaje.textContent = "";
+    mostrarPokemons(pokemons);
+    return;
+  }
+
+  const coincidencias = pokemons.filter((pokemon) => {
+    return (
+      pokemon.nombre.includes(busqueda) ||
+      String(pokemon.id) === busqueda
+    );
+  });
+
+  if (coincidencias.length === 0) {
+    mensaje.textContent = "No se ha encontrado ningún Pokémon.";
+    resultado.innerHTML = "";
+    return;
+  }
+
+  mensaje.textContent = "";
+  mostrarPokemons(coincidencias);
+};
+
+inputBusqueda.addEventListener("input", filtrarPokemons);
+
+formulario.addEventListener("submit", (evento) => {
+  evento.preventDefault();
+  filtrarPokemons();
+});
+
+const iniciarApp = async () => {
+  try {
+    mensaje.textContent = "Cargando Pokémon...";
+
+    pokemons = await obtenerPokemons();
+
+    mensaje.textContent = "";
+    mostrarPokemons(pokemons);
+  } catch (error) {
+    mensaje.textContent = error.message;
+  }
+};
+
+iniciarApp();
+```
+
+<br>
+
+Ya que tenemos la funcionalidad implementada, modificamos el CSS para que la información se presente de forma más ordenada y visual:
+
+```
+.panel-detalles {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 50%);
+  z-index: 10;
+}
+
+.panel-detalles[hidden] {
+  display: none;
+}
+
+.panel-detalles__contenido {
+  width: min(100%, 520px);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgb(0 0 0 / 20%);
+}
+
+.panel-detalles__cerrar {
+  display: block;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  color: white;
+  background: #dc2626;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.panel-detalles__cerrar:hover {
+  background: #b91c1c;
+}
+
+.panel-detalles__contenido > p:first-of-type {
+  margin: 1rem 0 0.25rem;
+  color: #6b7280;
+  text-align: center;
+  font-weight: bold;
+}
+
+.panel-detalles__contenido h2 {
+  margin: 0 0 0.5rem;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.panel-detalles__imagen {
+  display: block;
+  width: 220px;
+  height: 220px;
+  margin: 0.5rem auto 1rem;
+  image-rendering: pixelated;
+}
+
+.panel-detalles__contenido .pokemon__tipos {
+  margin-bottom: 1.25rem;
+}
+
+/* Datos principales */
+
+.panel-detalles__contenido > p {
+  width: 100%;
+  margin: 0.5rem 0;
+  text-align: left;
+  font-size: 1rem;
+}
+
+/* Títulos */
+
+.panel-detalles__contenido h3 {
+  margin: 1.5rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #e5e7eb;
+  text-align: left;
+  font-size: 1rem;
+}
+
+/* Listas */
+
+.panel-detalles__contenido ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.panel-detalles__contenido li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+```
+
+<br>
+
+Para finalizar, para que los datos de las tarjetas se vieran más ordenados modifiqué el `innerHTML` de `const mostrarDetalles = (pokemon) => {` sustituyendo:
+
+```
+<p><strong>Altura:</strong> ${pokemon.altura / 10} m</p>
+      <p><strong>Peso:</strong> ${pokemon.peso / 10} kg</p>
+      <p><strong>Experiencia base:</strong> ${pokemon.experiencia}</p>
+```
+
+por:
+
+```
+<div class="panel-detalles__datos">
+  <div>
+    <strong>Altura</strong>
+    <span>${pokemon.altura / 10} m</span>
+  </div>
+
+  <div>
+    <strong>Peso</strong>
+    <span>${pokemon.peso / 10} kg</span>
+  </div>
+
+  <div>
+    <strong>Experiencia</strong>
+    <span>${pokemon.experiencia}</span>
+  </div>
+</div>
+```
+
+y añadí el CSS correspondiente:
+
+```
+.panel-detalles__datos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.panel-detalles__datos div {
+  padding: 0.75rem;
+  text-align: left;
+  background: #f3f4f6;
+  border-radius: 0.6rem;
+}
+
+.panel-detalles__datos strong,
+.panel-detalles__datos span {
+  display: block;
+}
+
+.panel-detalles__datos strong {
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.panel-detalles__datos span {
+  font-size: 1rem;
+  font-weight: bold;
+}
+```

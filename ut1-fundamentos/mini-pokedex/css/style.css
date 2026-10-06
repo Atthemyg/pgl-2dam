@@ -173,12 +173,150 @@ body {
   gap: 0.5rem;
 }
 
+.boton_detalles {
+  margin: 0;
+  padding: 2rem;
+  width: 150px;
+  margin-left: 1rem;
+  justify-content: center;
+}
+
 .tipo {
   padding: 0.4rem 0.8rem;
   color: white;
   text-transform: capitalize;
   background: #4b5563;
   border-radius: 999px;
+}
+
+.panel-detalles {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 50%);
+  z-index: 10;
+}
+
+.panel-detalles[hidden] {
+  display: none;
+}
+
+.panel-detalles__contenido {
+  width: min(100%, 520px);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgb(0 0 0 / 20%);
+}
+
+.panel-detalles__cerrar {
+  display: block;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  color: white;
+  background: #dc2626;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.panel-detalles__cerrar:hover {
+  background: #b91c1c;
+}
+
+.panel-detalles__contenido > p:first-of-type {
+  margin: 1rem 0 0.25rem;
+  color: #6b7280;
+  text-align: center;
+  font-weight: bold;
+}
+
+.panel-detalles__contenido h2 {
+  margin: 0 0 0.5rem;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.panel-detalles__imagen {
+  display: block;
+  width: 220px;
+  height: 220px;
+  margin: 0.5rem auto 1rem;
+  image-rendering: pixelated;
+}
+
+.panel-detalles__contenido .pokemon__tipos {
+  margin-bottom: 1.25rem;
+}
+
+/* Datos principales */
+
+.panel-detalles__contenido > p {
+  width: 100%;
+  margin: 0.5rem 0;
+  text-align: left;
+  font-size: 1rem;
+}
+
+/* Títulos */
+
+.panel-detalles__contenido h3 {
+  margin: 1.5rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #e5e7eb;
+  text-align: left;
+  font-size: 1rem;
+}
+
+/* Listas */
+
+.panel-detalles__contenido ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.panel-detalles__contenido li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.panel-detalles__datos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.panel-detalles__datos div {
+  padding: 0.75rem;
+  text-align: left;
+  background: #f3f4f6;
+  border-radius: 0.6rem;
+}
+
+.panel-detalles__datos strong,
+.panel-detalles__datos span {
+  display: block;
+}
+
+.panel-detalles__datos strong {
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.panel-detalles__datos span {
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 @media (max-width: 480px) {
