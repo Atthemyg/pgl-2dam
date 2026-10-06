@@ -19,21 +19,32 @@
       Introduce el nombre o el número de un Pokémon para obtener su información.
     </p>
 
-    <form id="formulario-busqueda" class="buscador">
-      <label for="busqueda">Nombre o número</label>
+    <div class="buscador-fila">
 
-      <div class="buscador__controles">
-        <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: pikachu o 25" autocomplete="off">
+      <form id="formulario-busqueda" class="buscador">
+        <label for="busqueda">Nombre o número</label>
 
-        <button type="submit">Buscar</button>
+        <div class="buscador__controles">
+          <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: pikachu o 25" autocomplete="off">
 
-      </div>
-    </form>
+          <button type="submit">Buscar</button>
 
-    <p id="mensaje" class="mensaje" aria-live="polite"></p>
+          <div class="filtro-tipo">
 
-    <section id="resultado" class="resultado"></section>
-    <div id="panel-detalles" class="panel-detalles" hidden></div>
+            <select id="filtro-tipo">
+              <option value="todos">Todos</option>
+            </select>
+          </div>
+        </div>
+      </form>
+
+      <p id="mensaje" class="mensaje" aria-live="polite"></p>
+
+      <section id="resultado" class="resultado"></section>
+
+      <div id="panel-detalles" class="panel-detalles" hidden></div>
+
+    </div>
   </main>
 
   <script src="js/app.js"></script>

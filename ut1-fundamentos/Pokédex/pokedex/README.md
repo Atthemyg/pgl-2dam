@@ -827,7 +827,6 @@ const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
-const filtroTipo = document.querySelector("#filtro-tipo");
 const panelDetalles = document.querySelector("#panel-detalles");
 ```
 
@@ -1047,7 +1046,6 @@ const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
-const filtroTipo = document.querySelector("#filtro-tipo");
 const panelDetalles = document.querySelector("#panel-detalles");
 
 let pokemons = [];
@@ -1441,3 +1439,496 @@ y añadí el CSS correspondiente:
 ![](../pokedex/assets/img/10.png)
 
 ![](../pokedex/assets/img/11.png)
+
+
+## 6. Filtrado por tipo
+
+En este apartado he añadido un sistema de filtrado de Pokémon por tipo en el que un usuario puede seleccionar un tipo desde un desplegable y la aplicación mostrará únicamente los Pokémon que pertenecen a ese tipo cargados desde la API.
+
+En el HTML añadiremos un selector dentro de la zona de búsqueda:
+
+```
+<div class="filtro-tipo">
+  <label for="filtro-tipo">Tipo</label>
+
+  <select id="filtro-tipo">
+    <option value="todos">Todos</option>
+  </select>
+</div>
+```
+
+`<select>` permite al usuario seleccionar un tipo de Pokémon.
+
+La opción `<option value="todos">Todos</option>` permite volver a mostrar todos los Pokémon. Los demás tipos se añadirán posteriormente mediante JavaScript.
+
+En `app.js` añadiremos `const filtroTipo = document.querySelector("#filtro-tipo");`, que permite acceder desde JavaScript al `<select>` que hemos creado en el HTML. De esta manera podemos añadir opciones al selector, saber qué tipo ha seleccionado el usuario, y reaccionar cuando el usuario cambia la opción.
+
+Ahora tenemos que obtener todos los tipos disponibles en los Pokémon cargados y añadirlos al selector:
+
+```
+const cargarTipos = (pokemons) => {
+  const tipos = pokemons.flatMap((pokemon) => pokemon.tipos);
+
+  const tiposUnicos = [...new Set(tipos)];
+
+  tiposUnicos.sort();
+
+  tiposUnicos.forEach((tipo) => {
+    const opcion = document.createElement("option");
+
+    opcion.value = tipo;
+    opcion.textContent = tipo;
+
+    filtroTipo.appendChild(opcion);
+  });
+};
+```
+
+Cada Pokémon tiene un array `tipos`, y `flatMap()` permite juntar todos esos arrays en uno solo.
+
+Después utilizaremos `const tiposUnicos = [...new Set(tipos)];` para almacenar valores sin repetir y ordenamos con `tiposUnicos.sort();`.
+
+Crearemos las opciones recorriendo los tipos con `tiposUnicos.forEach((tipo) => {` que los creará como elementos `<option>`, y se establecerá su valor `opcion.value = tipo;` y el texto que verá el usuario `opcion.textContent = tipo;`.
+
+Finalmente se añade al `<select>` con `filtroTipo.appendChild(opcion);`
+
+<br>
+
+A continuación, tenemos que crear una función que se ejecute cuando el usuario cambie el tipo seleccionado:
+
+```
+const filtrarPorTipo = () => {
+  const tipoSeleccionado = filtroTipo.value;
+
+  if (tipoSeleccionado === "todos") {
+    mostrarPokemons(pokemons);
+    return;
+  }
+
+  const coincidencias = pokemons.filter((pokemon) => {
+    return pokemon.tipos.includes(tipoSeleccionado);
+  });
+
+  mostrarPokemons(coincidencias);
+};
+```
+
+`const tipoSeleccionado = filtroTipo.value;` obtiene el valor de la opción seleccionada.
+
+Se comprueba que si el usuario ha seleccionado `"todos"` mediante `if (tipoSeleccionado === "todos") {
+  mostrarPokemons(pokemons);
+  return;
+}`. En ese caso se vuelve a utilizar el array completo `pokemons` y se muestran todos los Pokémon.
+
+Si el usuario ha seleccionado un tipo concreto, se utiliza `const coincidencias = pokemons.filter((pokemon) => {
+  return pokemon.tipos.includes(tipoSeleccionado);
+});`. 
+
+Por último, `mostrarPokemons(coincidencias);` envía los Pokémon filtrados a la función que ya teníamos creada para mostrar las tarjetas.
+
+<br>
+
+Para que el filtrado se ejecute automáticamente cuando el usuario cambie el tipo añadiremos: 
+
+`filtroTipo.addEventListener("change", filtrarPorTipo);`
+
+<br>
+
+Para finalizar, en `iniciarApp()` ya obtenemos todos los Pokémon con `pokemons = await obtenerPokemons();`, y ahora le añadiremos `cargarTipos(pokemons);`.
+
+Por tanto, esta parte quedaría así:
+
+```
+pokemons = await obtenerPokemons();
+
+cargarTipos(pokemons);
+
+mensaje.textContent = "";
+mostrarPokemons(pokemons);
+```
+
+Esto es importante porque `cargarTipos()` necesita recibir los Pokémon para poder descubrir qué tipos existen.
+
+Toda la clase `app.js` terminaría de esta forma:
+
+```
+const formulario = document.querySelector("#formulario-busqueda");
+const inputBusqueda = document.querySelector("#busqueda");
+const mensaje = document.querySelector("#mensaje");
+const resultado = document.querySelector("#resultado");
+const filtroTipo = document.querySelector("#filtro-tipo");
+const panelDetalles = document.querySelector("#panel-detalles");
+
+let pokemons = [];
+
+const obtenerPokemons = async () => {
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=151`);
+
+  if (!respuesta.ok) {
+    throw new Error("No se han podido cargar los Pokémon.");
+  }
+
+  const datos = await respuesta.json();
+
+  const pokemons = await Promise.all(
+    datos.results.map(async (pokemon) => {
+      const respuestaPokemon = await fetch(pokemon.url);
+      const datosPokemon = await respuestaPokemon.json();
+
+      return {
+        id: datosPokemon.id,
+        nombre: datosPokemon.name,
+        imagenBack: datosPokemon.sprites.back_default,
+        imagenFront: datosPokemon.sprites.front_default,
+        altura: datosPokemon.height,
+        peso: datosPokemon.weight,
+        tipos: datosPokemon.types.map(({ type }) => type.name),
+        experiencia: datosPokemon.base_experience,
+        habilidades: datosPokemon.abilities.map(({ ability }) => ability.name),
+        estadisticas: datosPokemon.stats.map(({ base_stat, stat }) => ({
+          nombre: stat.name,
+          valor: base_stat,
+        })),
+      };
+
+    })
+  )
+  return pokemons;
+};
+
+const formatearId = (id) => {
+  return String(id).padStart(3, "0");
+};
+
+const cargarTipos = (pokemons) => {
+  const tipos = pokemons.flatMap((pokemon) => pokemon.tipos);
+
+  const tiposUnicos = [...new Set(tipos)];
+
+  tiposUnicos.sort();
+
+  tiposUnicos.forEach((tipo) => {
+    const opcion = document.createElement("option");
+
+    opcion.value = tipo;
+    opcion.textContent = tipo;
+
+    filtroTipo.appendChild(opcion);
+  });
+};
+
+const filtrarPorTipo = () => {
+  const tipoSeleccionado = filtroTipo.value;
+
+  if (tipoSeleccionado === "todos") {
+    mostrarPokemons(pokemons);
+    return;
+  }
+
+  const coincidencias = pokemons.filter((pokemon) => {
+    return pokemon.tipos.includes(tipoSeleccionado);
+  });
+
+  mostrarPokemons(coincidencias);
+};
+
+filtroTipo.addEventListener("change", filtrarPorTipo);
+
+const mostrarPokemons = (pokemons) => {
+  resultado.innerHTML = pokemons
+    .map((pokemon) => {
+      const tiposHTML = pokemon.tipos
+        .map((tipo) => `<span class="tipo">${tipo}</span>`)
+        .join("");
+
+      return `
+        <article class="pokemon">
+          <p class="pokemon__numero">N.º ${formatearId(pokemon.id)}</p>
+
+          <div class="galeria_pokemon">
+            <img
+              class="pokemon__imagen_back"
+              src="${pokemon.imagenBack}"
+              alt="Imagen trasera de ${pokemon.nombre}"
+            >
+
+            <img
+              class="pokemon__imagen_front"
+              src="${pokemon.imagenFront}"
+              alt="Imagen frontal de ${pokemon.nombre}"
+            >
+          </div>
+
+          <h2 class="pokemon__nombre">${pokemon.nombre}</h2>
+
+          <div class="pokemon__datos">
+            <p><strong>Altura</strong><br>${pokemon.altura / 10} m</p>
+            <p><strong>Peso</strong><br>${pokemon.peso / 10} kg</p>
+          </div>
+
+          <div class="pokemon__tipos">
+            ${tiposHTML}
+          </div>
+          <div class="boton_detalles">
+            <button class="boton-detalles" data-id="${pokemon.id}">
+              Ver detalles
+            </button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+};
+
+const mostrarDetalles = (pokemon) => {
+  const tiposHTML = pokemon.tipos
+    .map((tipo) => `<span class="tipo">${tipo}</span>`)
+    .join("");
+
+
+  const habilidadesHTML = pokemon.habilidades
+    .map((habilidad) => `<li>${habilidad}</li>`)
+    .join("");
+
+  const estadisticasHTML = pokemon.estadisticas
+    .map(
+      (estadistica) => `
+        <li>
+          <strong>${estadistica.nombre}</strong>: ${estadistica.valor}
+        </li>
+      `
+    )
+    .join("");
+
+  panelDetalles.innerHTML = `
+    <div class="panel-detalles__contenido">
+      <button class="panel-detalles__cerrar" type="button">
+        Cerrar
+      </button>
+
+      <p>N.º ${formatearId(pokemon.id)}</p>
+
+      <h2>${pokemon.nombre}</h2>
+
+      <img
+        src="${pokemon.imagenFront}"
+        alt="Imagen frontal de ${pokemon.nombre}"
+        class="panel-detalles__imagen"
+      >
+
+      <div class="pokemon__tipos">
+        ${tiposHTML}
+      </div>
+
+      <div class="panel-detalles__datos">
+      <div>
+        <strong>Altura</strong>
+        <span>${pokemon.altura / 10} m</span>
+      </div>
+
+      <div>
+        <strong>Peso</strong>
+        <span>${pokemon.peso / 10} kg</span>
+      </div>
+
+      <div>
+        <strong>Experiencia</strong>
+        <span>${pokemon.experiencia}</span>
+      </div>
+    </div>
+
+      <h3>Habilidades</h3>
+      <ul>
+        ${habilidadesHTML}
+      </ul>
+
+      <h3>Estadísticas base</h3>
+      <ul>
+        ${estadisticasHTML}
+      </ul>
+    </div>
+  `;
+
+  panelDetalles.hidden = false;
+};
+
+resultado.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("boton-detalles")) {
+    return;
+  }
+
+  const id = Number(evento.target.dataset.id);
+
+  const pokemon = pokemons.find((pokemon) => pokemon.id === id);
+
+  mostrarDetalles(pokemon);
+});
+
+panelDetalles.addEventListener("click", (evento) => {
+  if (!evento.target.classList.contains("panel-detalles__cerrar")) {
+    return;
+  }
+
+  panelDetalles.hidden = true;
+});
+
+const filtrarPokemons = () => {
+  const busqueda = inputBusqueda.value.trim().toLowerCase();
+  const tipoSeleccionado = filtroTipo.value;
+
+  const coincidencias = pokemons.filter((pokemon) => {
+    const coincideBusqueda =
+      !busqueda ||
+      pokemon.nombre.includes(busqueda) ||
+      String(pokemon.id) === busqueda;
+
+    const coincideTipo =
+      tipoSeleccionado === "todos" ||
+      pokemon.tipos.includes(tipoSeleccionado);
+
+    return coincideBusqueda && coincideTipo;
+  });
+
+  if (coincidencias.length === 0) {
+    mensaje.textContent = "No se ha encontrado ningún Pokémon.";
+    resultado.innerHTML = "";
+    return;
+  }
+
+  mensaje.textContent = "";
+  mostrarPokemons(coincidencias);
+};
+
+inputBusqueda.addEventListener("input", filtrarPokemons);
+
+formulario.addEventListener("submit", (evento) => {
+  evento.preventDefault();
+  filtrarPokemons();
+});
+
+filtroTipo.addEventListener("change", filtrarPokemons);
+
+const iniciarApp = async () => {
+  try {
+    mensaje.textContent = "Cargando Pokémon...";
+
+    pokemons = await obtenerPokemons();
+
+    cargarTipos(pokemons);
+
+    mensaje.textContent = "";
+    mostrarPokemons(pokemons);
+  } catch (error) {
+    mensaje.textContent = error.message;
+  }
+};
+
+iniciarApp();
+```
+
+<br>
+
+Para que el selector quedé bien estéticamente, lo he colocado dentro de la zona del buscador, junto al botón:
+
+```
+<div class="buscador__controles">
+
+  <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: pikachu o 25" autocomplete="off">
+
+    <button type="submit">Buscar</button>
+
+       <div class="filtro-tipo">
+
+        <select id="filtro-tipo">
+          <option value="todos">Todos</option>
+        </select>
+
+      </div>
+  </div>
+```
+
+De esta manera, los controles relacionados con la búsqueda y el filtrado quedan agrupados visualmente. El código completo:
+
+```
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <main class="contenedor">
+
+    <header class="encabezado">
+      <img src="assets/img/encabezado.png" alt="Encabezado de la Pokédex" class="encabezado__imagen">
+    </header>
+
+    <p class="introduccion">
+      Introduce el nombre o el número de un Pokémon para obtener su información.
+    </p>
+
+    <div class="buscador-fila">
+
+      <form id="formulario-busqueda" class="buscador">
+        <label for="busqueda">Nombre o número</label>
+
+        <div class="buscador__controles">
+          <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: pikachu o 25" autocomplete="off">
+
+          <button type="submit">Buscar</button>
+
+          <div class="filtro-tipo">
+
+            <select id="filtro-tipo">
+              <option value="todos">Todos</option>
+            </select>
+          </div>
+        </div>
+      </form>
+
+      <p id="mensaje" class="mensaje" aria-live="polite"></p>
+
+      <section id="resultado" class="resultado"></section>
+
+      <div id="panel-detalles" class="panel-detalles" hidden></div>
+
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>
+```
+
+Esto lo complementaremos con el CSS:
+
+```
+.filtro-tipo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filtro-tipo label {
+  font-weight: bold;
+}
+
+.filtro-tipo select {
+  width: auto;
+  padding: 0.75rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  font: inherit;
+  background: white;
+  cursor: pointer;
+}
+```
+
+![](../pokedex/assets/img/12.png)
+
+![](../pokedex/assets/img/13.png)

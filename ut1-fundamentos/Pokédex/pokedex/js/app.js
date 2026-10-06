@@ -46,6 +46,40 @@ const formatearId = (id) => {
   return String(id).padStart(3, "0");
 };
 
+const cargarTipos = (pokemons) => {
+  const tipos = pokemons.flatMap((pokemon) => pokemon.tipos);
+
+  const tiposUnicos = [...new Set(tipos)];
+
+  tiposUnicos.sort();
+
+  tiposUnicos.forEach((tipo) => {
+    const opcion = document.createElement("option");
+
+    opcion.value = tipo;
+    opcion.textContent = tipo;
+
+    filtroTipo.appendChild(opcion);
+  });
+};
+
+const filtrarPorTipo = () => {
+  const tipoSeleccionado = filtroTipo.value;
+
+  if (tipoSeleccionado === "todos") {
+    mostrarPokemons(pokemons);
+    return;
+  }
+
+  const coincidencias = pokemons.filter((pokemon) => {
+    return pokemon.tipos.includes(tipoSeleccionado);
+  });
+
+  mostrarPokemons(coincidencias);
+};
+
+filtroTipo.addEventListener("change", filtrarPorTipo);
+
 const mostrarPokemons = (pokemons) => {
   resultado.innerHTML = pokemons
     .map((pokemon) => {
@@ -186,18 +220,19 @@ panelDetalles.addEventListener("click", (evento) => {
 
 const filtrarPokemons = () => {
   const busqueda = inputBusqueda.value.trim().toLowerCase();
-
-  if (!busqueda) {
-    mensaje.textContent = "";
-    mostrarPokemons(pokemons);
-    return;
-  }
+  const tipoSeleccionado = filtroTipo.value;
 
   const coincidencias = pokemons.filter((pokemon) => {
-    return (
+    const coincideBusqueda =
+      !busqueda ||
       pokemon.nombre.includes(busqueda) ||
-      String(pokemon.id) === busqueda
-    );
+      String(pokemon.id) === busqueda;
+
+    const coincideTipo =
+      tipoSeleccionado === "todos" ||
+      pokemon.tipos.includes(tipoSeleccionado);
+
+    return coincideBusqueda && coincideTipo;
   });
 
   if (coincidencias.length === 0) {
@@ -217,11 +252,15 @@ formulario.addEventListener("submit", (evento) => {
   filtrarPokemons();
 });
 
+filtroTipo.addEventListener("change", filtrarPokemons);
+
 const iniciarApp = async () => {
   try {
     mensaje.textContent = "Cargando Pokémon...";
 
     pokemons = await obtenerPokemons();
+
+    cargarTipos(pokemons);
 
     mensaje.textContent = "";
     mostrarPokemons(pokemons);
