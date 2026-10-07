@@ -2105,6 +2105,10 @@ Por último, para que el botón de reintento tenga el mismo estilo general de la
 
 Con estos cambios ya tendríamos una Pokédex funcional y preparada para errores. Lo único que falta es añadir cambios al CSS para cambiarla al gusto de cada uno.
 
+![](../pokedex/assets/img/18.png)
+
+<br>
+
 - **Dificultades encontradas**: las únicas dificultades que encontré fueron la programación de la app en JavaScript, ya que es un lenguaje que no conozco demasiado, y tuve que apoyarme de algo de ayuda de Internet.
 
 - **Conocimientos adquiridos**: gracias a esta actividad me he familiarizado un poco más con JavaScript para hacer algunas funciones sencillas con más facilidad.

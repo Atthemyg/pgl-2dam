@@ -12,7 +12,7 @@ const obtenerPokemons = async () => {
   const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=151`);
 
   if (!respuesta.ok) {
-    throw new Error("No se han podido cargar los Pokémon.");
+    throw new Error("No se han podido cargar los Pokémon");
   }
 
   const datos = await respuesta.json();
@@ -244,7 +244,7 @@ const filtrarPokemons = () => {
   });
 
   if (coincidencias.length === 0) {
-    mensaje.textContent = "No se ha encontrado ningún Pokémon.";
+    mensaje.textContent = "No se ha encontrado ningún Pokémon";
     resultado.innerHTML = "";
     return;
   }
@@ -271,11 +271,11 @@ const iniciarApp = async () => {
 
     cargarTipos(pokemons);
 
-    mensaje.textContent = "Pokémon cargados correctamente.";
+    mensaje.textContent = "Pokémon cargados correctamente";
     mostrarPokemons(pokemons);
   } catch (error) {
     mensaje.textContent =
-      "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo.";
+      "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo";
 
     botonReintentar.hidden = false;
   }
