@@ -1,5 +1,29 @@
 # Desarrollo de una Pokédex con JavaScript
 
+**Nombre**: Atteneri Bravo Barroso
+
+**Descripción del proyecto**: Pokédex web que permite consultar información de los 151 primeros Pokémon mediante datos obtenidos de la API de PokéAPI. La aplicación permite buscar Pokémon por nombre o número, filtrarlos por tipo y consultar información ampliada como sus tipos, altura, peso, experiencia, habilidades y estadísticas base. También incluye gestión de estados de carga, búsquedas sin resultados y errores de conexión.
+
+**Tecnologías usadas**: 
+
+- HTML5
+- CSS3
+- JavaScript
+- API REST de PokéAPI
+- Visual Studio Code
+- Live Server
+
+**Instrucciones de ejecución**:
+
+1. Descargar o clonar el proyecto.
+2. Abrir la carpeta del proyecto en Visual Studio Code.
+3. Instalar la extensión Live Server si no está instalada.
+4. Abrir el archivo index.html.
+5. Pulsar con el botón derecho sobre index.html y seleccionar Open with Live Server.
+6. La aplicación se abrirá en el navegador.
+
+<br>
+
 ## 1. Punto de partida
 
 Para comenzar el proyecto he creado una mini-pokedex inicial que contiene un html y css sencillos, y una app.js que se conecta a [PokéAPI](https://pokeapi.co/) y realiza la búsqueda de un Pokémon devolviendo algunos de sus datos.
@@ -2075,3 +2099,14 @@ Por último, para que el botón de reintento tenga el mismo estilo general de la
 ![](../pokedex/assets/img/15.png)
 
 ![](../pokedex/assets/img/17.png)
+
+
+## 8. Conclusiones
+
+Con estos cambios ya tendríamos una Pokédex funcional y preparada para errores. Lo único que falta es añadir cambios al CSS para cambiarla al gusto de cada uno.
+
+- **Dificultades encontradas**: las únicas dificultades que encontré fueron la programación de la app en JavaScript, ya que es un lenguaje que no conozco demasiado, y tuve que apoyarme de algo de ayuda de Internet.
+
+- **Conocimientos adquiridos**: gracias a esta actividad me he familiarizado un poco más con JavaScript para hacer algunas funciones sencillas con más facilidad.
+
+- **Posibles mejoras futuras**: se pueden mejorar bastantes cosas, sobre todo en el apartado visual, adaptarla de inglés a español, ordenar por id o de la A-Z, mostrar más datos de cada Pokémon...

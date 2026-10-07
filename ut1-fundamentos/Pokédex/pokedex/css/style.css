@@ -174,11 +174,11 @@ body {
 }
 
 .boton_detalles {
+  display: flex;
+  justify-content: center;
+  width: 100%;
   margin: 0;
   padding: 2rem;
-  width: 150px;
-  margin-left: 1rem;
-  justify-content: center;
 }
 
 .tipo {
@@ -187,6 +187,79 @@ body {
   text-transform: capitalize;
   background: #4b5563;
   border-radius: 999px;
+}
+
+.tipo-fire {
+  background: #CF520E;
+}
+
+.tipo-grass {
+  background: #77B054;
+}
+
+.tipo-water {
+  background: #538eec;
+}
+
+.tipo-electric {
+  background: #eab308;
+  color: #1f2937;
+}
+
+.tipo-psychic {
+  background: #423157;
+}
+
+.tipo-ice {
+  background: #2da8be;
+}
+
+.tipo-dragon {
+  background: #B5A643;
+}
+
+.tipo-dark {
+  background: #374151;
+}
+
+.tipo-fairy {
+  background: #d34995;
+}
+
+.tipo-normal {
+  background: #9ca3af;
+}
+
+.tipo-fighting {
+  background: #C29040;
+}
+
+.tipo-poison {
+  background: #234E54;
+}
+
+.tipo-ground {
+  background: #af7b31;
+}
+
+.tipo-flying {
+  background: #8F8461;
+}
+
+.tipo-bug {
+  background: #A2C45C;
+}
+
+.tipo-rock {
+  background: #78716c;
+}
+
+.tipo-ghost {
+  background: #9F72B3;
+}
+
+.tipo-steel {
+  background: #64748b;
 }
 
 .panel-detalles {
@@ -353,8 +426,78 @@ body {
   display: none;
 }
 
+@media (max-width: 768px) {
+  .resultado {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .buscador__controles {
+    flex-wrap: wrap;
+  }
+
+  .buscador input {
+    min-width: 200px;
+  }
+}
+
 @media (max-width: 480px) {
+  .contenedor {
+    padding: 0 0.5rem;
+  }
+
+  .encabezado__imagen {
+    transform: scale(1.1);
+  }
+
+  .introduccion {
+    margin-top: -80px;
+    font-size: 0.95rem;
+  }
+
+  .buscador {
+    padding: 1rem;
+  }
+
   .buscador__controles {
     flex-direction: column;
+  }
+
+  .buscador input,
+  .buscador button,
+  .filtro-tipo {
+    width: 100%;
+  }
+
+  .filtro-tipo {
+    justify-content: space-between;
+  }
+
+  .filtro-tipo select {
+    flex: 1;
+  }
+
+  .resultado {
+    grid-template-columns: 1fr;
+  }
+
+  .pokemon {
+    padding: 1rem;
+  }
+
+  .panel-detalles {
+    padding: 0.5rem;
+  }
+
+  .panel-detalles__contenido {
+    padding: 1rem;
+  }
+
+  .panel-detalles__imagen {
+    width: 180px;
+    height: 180px;
+  }
+
+  .panel-detalles__datos {
+    grid-template-columns: 1fr;
   }
 }

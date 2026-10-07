@@ -58,7 +58,7 @@ const cargarTipos = (pokemons) => {
     const opcion = document.createElement("option");
 
     opcion.value = tipo;
-    opcion.textContent = tipo;
+    opcion.textContent = tipo.charAt(0).toUpperCase() + tipo.slice(1);
 
     filtroTipo.appendChild(opcion);
   });
@@ -85,7 +85,7 @@ const mostrarPokemons = (pokemons) => {
   resultado.innerHTML = pokemons
     .map((pokemon) => {
       const tiposHTML = pokemon.tipos
-        .map((tipo) => `<span class="tipo">${tipo}</span>`)
+        .map((tipo) => `<span class="tipo tipo-${tipo}">${tipo}</span>`)
         .join("");
 
       return `
@@ -127,23 +127,30 @@ const mostrarPokemons = (pokemons) => {
     .join("");
 };
 
+const formatearTexto = (texto) => {
+  return texto
+    .replace("-", " ")
+    .replace(/^./, (letra) => letra.toUpperCase());
+};
+
 const mostrarDetalles = (pokemon) => {
   const tiposHTML = pokemon.tipos
-    .map((tipo) => `<span class="tipo">${tipo}</span>`)
-    .join("");
+  .map((tipo) => `<span class="tipo tipo-${tipo}">${tipo}</span>`)
+  .join("");
 
 
   const habilidadesHTML = pokemon.habilidades
-    .map((habilidad) => `<li>${habilidad}</li>`)
+    .map((habilidad) => `<li>${formatearTexto(habilidad)}</li>`)
     .join("");
+
 
   const estadisticasHTML = pokemon.estadisticas
     .map(
       (estadistica) => `
-        <li>
-          <strong>${estadistica.nombre}</strong>: ${estadistica.valor}
-        </li>
-      `
+      <li>
+        <strong>${formatearTexto(estadistica.nombre)}</strong>: ${estadistica.valor}
+      </li>
+    `
     )
     .join("");
 
