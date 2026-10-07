@@ -2103,7 +2103,7 @@ Por último, para que el botón de reintento tenga el mismo estilo general de la
 
 ## 8. Conclusiones
 
-Con estos cambios ya tendríamos una Pokédex funcional y preparada para errores. Lo único que falta es añadir cambios al CSS para cambiarla al gusto de cada uno.
+Con estos cambios ya tendríamos una Pokédex funcional y preparada para errores. Lo único que falta es añadir más cambios al programa para cambiarla al gusto de cada uno.
 
 ![](../pokedex/assets/img/18.png)
 

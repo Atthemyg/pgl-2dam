@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/img/favicon.ico" sizes="any">
   <title>Pokédex</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 
 <body>
@@ -22,26 +22,26 @@
 
     <div class="buscador-fila">
 
-      <form id="formulario-busqueda" class="buscador">
+      <div class="buscador">
         <label for="busqueda">Nombre o número</label>
 
         <div class="buscador__controles">
-          <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: Pikachu o 25" autocomplete="off">
-
-          <button type="submit">Buscar</button>
+          <input id="busqueda" name="busqueda" type="text" placeholder="Ejemplo: Pikachu o 25" autocomplete="off"
+            disabled>
 
           <div class="filtro-tipo">
-
-            <select id="filtro-tipo">
+            <select id="filtro-tipo" disabled>
               <option value="todos">Todos</option>
             </select>
           </div>
         </div>
-      </form>
+      </div>
 
       <p id="mensaje" class="mensaje" aria-live="polite">
         Aplicación preparada
       </p>
+
+      <button id="boton-cargar" class="boton-cargar" type="button">Cargar Pokémon</button>
 
       <button id="boton-reintentar" type="button" hidden>
         Volver a intentarlo
@@ -52,6 +52,7 @@
       <div id="panel-detalles" class="panel-detalles" hidden></div>
 
     </div>
+
   </main>
 
   <script src="js/app.js"></script>

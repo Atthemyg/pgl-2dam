@@ -1,10 +1,5 @@
-/* =========================================================
-   POKÉDEX · estilo consola (versión ligera)
-   ========================================================= */
-
 :root {
   --rojo: #e3170f;
-  --rojo-oscuro: #8c0a06;
   --tinta: #1a1a1a;
   --amarillo: #ffd400;
   --crema: #f7f5ec;
@@ -31,8 +26,7 @@ body {
   margin: 0 auto;
 }
 
-/* El rojo del cuerpo sube por detrás de la parte baja de la tapa
-   (el 40 % de su alto), así no se ve hueco entre las dos piezas. */
+
 .encabezado {
   background:
     linear-gradient(var(--tinta), var(--tinta)) left bottom / 4px 40% no-repeat,
@@ -104,36 +98,27 @@ body {
 }
 
 .buscador input {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
 }
 
 .filtro-tipo {
   display: flex;
   align-items: center;
+  flex: 0 0 25%;
+  min-width: 170px;
 }
 
 .filtro-tipo select {
+  width: 100%;
   cursor: pointer;
 }
 
-.buscador button,
-#boton-reintentar {
-  padding: 0.75rem 1.25rem;
-  color: var(--tinta);
-  font: inherit;
-  font-weight: 800;
-  background: var(--amarillo);
-  border: 3px solid var(--tinta);
-  border-radius: 0.6rem;
-  box-shadow: 0 4px 0 #a88a00;
-  cursor: pointer;
-}
-
-.buscador button:active,
-#boton-reintentar:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #a88a00;
+button:disabled,
+input:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 button:focus-visible,
@@ -141,6 +126,90 @@ input:focus-visible,
 select:focus-visible {
   outline: 3px solid #7cc4ff;
   outline-offset: 2px;
+}
+
+/* ---------- Botones (reintentar, ver detalles, cerrar) ---------- */
+
+button#boton-reintentar,
+button.boton-detalles,
+button.panel-detalles__cerrar {
+  color: #1a1a1a;
+  font: inherit;
+  font-weight: 800;
+  background: #ffd400;
+  border: 3px solid #1a1a1a;
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
+button#boton-reintentar {
+  align-self: center;
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 4px 0 #a88a00;
+}
+
+button.boton-detalles {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 0 #a88a00;
+}
+
+button.panel-detalles__cerrar {
+  display: block;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 3px 0 #a88a00;
+}
+
+button#boton-reintentar:active,
+button.boton-detalles:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #a88a00;
+}
+
+button#boton-reintentar[hidden] {
+  display: none;
+}
+
+/* ---------- Botón "Cargar Pokémon" ---------- */
+
+button.boton-cargar {
+  align-self: center;
+  display: block;
+  margin: 0.5rem 0 0.25rem;
+  padding: 0.9rem 2.5rem;
+  color: #1a1a1a;
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: linear-gradient(#ffe45c, #ffd400 55%, #f0be00);
+  border: 4px solid #1a1a1a;
+  border-radius: 999px;
+  box-shadow: 0 6px 0 #a88a00, 0 12px 18px rgb(0 0 0 / 25%);
+  cursor: pointer;
+}
+
+button.boton-cargar:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+button.boton-cargar:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #a88a00, 0 4px 8px rgb(0 0 0 / 25%);
+}
+
+button.boton-cargar:disabled {
+  opacity: 1;
+  cursor: progress;
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #a88a00, 0 4px 8px rgb(0 0 0 / 25%);
+}
+
+button.boton-cargar[hidden] {
+  display: none;
 }
 
 /* ---------- Mensaje de estado ---------- */
@@ -164,18 +233,9 @@ select:focus-visible {
 }
 
 /* Si el botón de reintentar está visible, es un error */
-.mensaje:has(+ #boton-reintentar:not([hidden])) {
+.mensaje:has(~ #boton-reintentar:not([hidden])) {
   color: #ffb4a8;
   background: #2b0f0c;
-}
-
-#boton-reintentar {
-  align-self: center;
-  margin: 0;
-}
-
-#boton-reintentar[hidden] {
-  display: none;
 }
 
 /* ---------- Pantalla con las tarjetas ---------- */
@@ -217,7 +277,7 @@ select:focus-visible {
 @media (hover: hover) {
   .pokemon:hover {
     transform: scale(1.06);
-    z-index: 2; /* para que quede por encima de las tarjetas vecinas */
+    z-index: 2;
   }
 }
 
@@ -329,25 +389,7 @@ select:focus-visible {
   padding: 1rem 0 0;
 }
 
-.boton-detalles {
-  padding: 0.55rem 1.1rem;
-  color: white;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 800;
-  background: var(--rojo);
-  border: 3px solid var(--tinta);
-  border-radius: 0.6rem;
-  box-shadow: 0 4px 0 var(--rojo-oscuro);
-  cursor: pointer;
-}
-
-.boton-detalles:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--rojo-oscuro);
-}
-
-/* Color de cada tarjeta = su primer tipo (sin tocar el JS) */
+/* Color de cada tarjeta */
 .pokemon:has(> .pokemon__tipos > .tipo-fire:first-child) { --acento: #CF520E; }
 .pokemon:has(> .pokemon__tipos > .tipo-grass:first-child) { --acento: #77B054; }
 .pokemon:has(> .pokemon__tipos > .tipo-water:first-child) { --acento: #538eec; }
@@ -424,20 +466,6 @@ select:focus-visible {
   border: 4px solid var(--tinta);
   border-top: 14px solid var(--rojo);
   border-radius: 1.25rem;
-}
-
-.panel-detalles__cerrar {
-  display: block;
-  margin-left: auto;
-  padding: 0.5rem 1rem;
-  color: var(--tinta);
-  font: inherit;
-  font-weight: 800;
-  background: var(--amarillo);
-  border: 3px solid var(--tinta);
-  border-radius: 0.6rem;
-  box-shadow: 0 3px 0 #a88a00;
-  cursor: pointer;
 }
 
 .panel-detalles__contenido > p:first-of-type {
@@ -534,7 +562,11 @@ select:focus-visible {
   }
 
   .buscador input {
-    min-width: 200px;
+    flex: 1 1 200px;
+  }
+
+  .filtro-tipo {
+    flex: 1 1 170px;
   }
 
   .resultado {
@@ -567,13 +599,15 @@ select:focus-visible {
   }
 
   .buscador input,
-  .buscador button,
   .filtro-tipo {
+    flex: none;
     width: 100%;
+    min-width: 0;
   }
 
-  .filtro-tipo select {
-    flex: 1;
+  button.boton-cargar {
+    width: 100%;
+    padding-inline: 1rem;
   }
 
   .resultado {

@@ -1,9 +1,9 @@
-const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
 const filtroTipo = document.querySelector("#filtro-tipo");
 const panelDetalles = document.querySelector("#panel-detalles");
+const botonCargar = document.querySelector("#boton-cargar");
 const botonReintentar = document.querySelector("#boton-reintentar");
 
 let pokemons = [];
@@ -63,23 +63,6 @@ const cargarTipos = (pokemons) => {
     filtroTipo.appendChild(opcion);
   });
 };
-
-const filtrarPorTipo = () => {
-  const tipoSeleccionado = filtroTipo.value;
-
-  if (tipoSeleccionado === "todos") {
-    mostrarPokemons(pokemons);
-    return;
-  }
-
-  const coincidencias = pokemons.filter((pokemon) => {
-    return pokemon.tipos.includes(tipoSeleccionado);
-  });
-
-  mostrarPokemons(coincidencias);
-};
-
-filtroTipo.addEventListener("change", filtrarPorTipo);
 
 const mostrarPokemons = (pokemons) => {
   resultado.innerHTML = pokemons
@@ -255,21 +238,22 @@ const filtrarPokemons = () => {
 
 inputBusqueda.addEventListener("input", filtrarPokemons);
 
-formulario.addEventListener("submit", (evento) => {
-  evento.preventDefault();
-  filtrarPokemons();
-});
-
 filtroTipo.addEventListener("change", filtrarPokemons);
 
 const iniciarApp = async () => {
   try {
     mensaje.textContent = "Cargando Pokémon...";
+    botonCargar.disabled = true;
+    botonCargar.textContent = "Cargando...";
     botonReintentar.hidden = true;
 
     pokemons = await obtenerPokemons();
 
     cargarTipos(pokemons);
+
+    inputBusqueda.disabled = false;
+    filtroTipo.disabled = false;
+    botonCargar.hidden = true;
 
     mensaje.textContent = "Pokémon cargados correctamente";
     mostrarPokemons(pokemons);
@@ -277,10 +261,10 @@ const iniciarApp = async () => {
     mensaje.textContent =
       "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo";
 
+    botonCargar.hidden = true;
     botonReintentar.hidden = false;
   }
 };
 
+botonCargar.addEventListener("click", iniciarApp);
 botonReintentar.addEventListener("click", iniciarApp);
-
-iniciarApp();
