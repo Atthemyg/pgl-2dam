@@ -232,7 +232,6 @@ button.boton-cargar[hidden] {
   display: none;
 }
 
-/* Si el botón de reintentar está visible, es un error */
 .mensaje:has(~ #boton-reintentar:not([hidden])) {
   color: #ffb4a8;
   background: #2b0f0c;
@@ -265,15 +264,13 @@ button.boton-cargar[hidden] {
   background: var(--crema);
   border: 3px solid var(--tinta);
   border-radius: 1rem;
-  /* El navegador solo pinta las tarjetas que se ven: mucho más fluido */
   content-visibility: auto;
   contain-intrinsic-size: auto 380px;
   position: relative;
-  /* Solo se anima transform: es lo más barato para el navegador */
   transition: transform 0.18s ease-out;
 }
 
-/* Zoom al pasar el ratón (solo en dispositivos con ratón) */
+/* Zoom al pasar el ratón */
 @media (hover: hover) {
   .pokemon:hover {
     transform: scale(1.06);
@@ -380,7 +377,6 @@ button.boton-cargar[hidden] {
   gap: 0.4rem;
 }
 
-/* El botón queda siempre abajo aunque las tarjetas tengan distinta altura */
 .boton_detalles {
   display: flex;
   justify-content: center;

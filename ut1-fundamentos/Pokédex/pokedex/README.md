@@ -2114,3 +2114,15 @@ Con estos cambios ya tendríamos una Pokédex funcional y preparada para errores
 - **Conocimientos adquiridos**: gracias a esta actividad me he familiarizado un poco más con JavaScript para hacer algunas funciones sencillas con más facilidad.
 
 - **Posibles mejoras futuras**: se pueden mejorar bastantes cosas, sobre todo en el apartado visual, adaptarla de inglés a español, ordenar por id o de la A-Z, mostrar más datos de cada Pokémon...
+
+
+## Modificaciones finales
+
+### Contador de Pokemon
+
+He añadido `const contador = document.querySelector("#contador");` para crear un contador que cuenta el numero de pokémon totales en el array `contador.textContent = pokemons.length + " Pokemon encontrados";` dentro de `const iniciarApp = async () => {` en la app.js.
+
+Tambien añado `<p id="contador" class="mensaje" aria-live="polite">
+      </p>` dentro del html para que muestre el mensaje.
+
+![](../pokedex/assets/img/19.png)

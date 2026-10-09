@@ -1,12 +1,17 @@
 const inputBusqueda = document.querySelector("#busqueda");
 const mensaje = document.querySelector("#mensaje");
+const contador = document.querySelector("#contador");
 const resultado = document.querySelector("#resultado");
 const filtroTipo = document.querySelector("#filtro-tipo");
 const panelDetalles = document.querySelector("#panel-detalles");
 const botonCargar = document.querySelector("#boton-cargar");
 const botonReintentar = document.querySelector("#boton-reintentar");
 
+const aleatorio = Math.random();
+
 let pokemons = [];
+
+
 
 const obtenerPokemons = async () => {
   const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=151`);
@@ -16,6 +21,7 @@ const obtenerPokemons = async () => {
   }
 
   const datos = await respuesta.json();
+
 
   const pokemons = await Promise.all(
     datos.results.map(async (pokemon) => {
@@ -37,7 +43,7 @@ const obtenerPokemons = async () => {
           valor: base_stat,
         })),
       };
-
+        
     })
   )
   return pokemons;
@@ -256,6 +262,7 @@ const iniciarApp = async () => {
     botonCargar.hidden = true;
 
     mensaje.textContent = "Pokémon cargados correctamente";
+    contador.textContent = pokemons.length + " Pokemon encontrados";
     mostrarPokemons(pokemons);
   } catch (error) {
     mensaje.textContent =
