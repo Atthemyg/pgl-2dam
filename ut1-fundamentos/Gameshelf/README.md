@@ -475,4 +475,4 @@ Además comprobé que al desactivar el filtro de precio se vuelve a la lista del
 
 ## Enlace al repositorio de GitHub
 
-https://github.com/Atthemyg/pgl-2dam/tree/main/ut1-fundamentos/gameshelf
+(https://github.com/Atthemyg/pgl-2dam/tree/main/ut1-fundamentos/Gameshelf)
