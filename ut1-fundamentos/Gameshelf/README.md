@@ -15,6 +15,8 @@ GameShelf es una pequeña aplicación web hecha con **React + TypeScript** y cre
 
 Además, un texto indica cuántos juegos se están mostrando de los 10 totales.
 
+<br>
+
 ![](capturas/6.png)
 
 ## Herramientas utilizadas
@@ -254,7 +256,7 @@ const games: Game[] = [
 </section>
 ```
 
-![Tres tarjetas en pantalla (todavía sin estilos)](capturas/4.png)
+![](capturas/4.png)
 
 - `type Game` describe la estructura de cada videojuego.
 - `string` significa texto; `number`, número; `boolean`, `true` o `false`.
@@ -380,7 +382,9 @@ Al hacer clic, React cambia el estado y vuelve a renderizar `App`: se recalcula 
 
 **¿Por qué usamos `setOnlyAvailable` para cambiar el estado?** Porque React solo sabe que el estado ha cambiado si lo cambiamos con la función que nos da `useState`. Si hiciéramos `onlyAvailable = true` directamente, el valor cambiaría pero la pantalla no se actualizaría.
 
-![Filtro de disponibilidad activo](capturas/7.png)
+<br>
+
+![](capturas/7.png)
 
 ## Mini reto: juegos por menos de 15 €
 
@@ -417,6 +421,8 @@ Y el `map()` usa la lista resultante de ambos filtros: `visibleGames.map(...)`.
 - `filter()` **no modifica** el array original `games`: crea listas nuevas para dibujar.
 
 Como extra añadí un contador con la propiedad `length` de la lista visible: `Mostrando {visibleGames.length} de {games.length} juegos`.
+
+<br>
 
 ![](capturas/8.png)
 
