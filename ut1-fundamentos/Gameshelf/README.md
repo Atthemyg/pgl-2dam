@@ -418,7 +418,7 @@ Y el `map()` usa la lista resultante de ambos filtros: `visibleGames.map(...)`.
 
 Como extra añadí un contador con la propiedad `length` de la lista visible: `Mostrando {visibleGames.length} de {games.length} juegos`.
 
-![Aplicación final con los dos filtros activados](capturas/8.png)
+![](capturas/8.png)
 
 ## Cómo probé los filtros
 
@@ -427,9 +427,9 @@ Comprobé los resultados a mano en el navegador y también con una prueba autom�
 | Filtros activados | Resultado | Nº de tarjetas |
 |---|---|---|
 | Ninguno | Los 10 juegos | 10 |
-| Solo disponibles | Los juegos con `available: true` | 7 |
-| Solo menos de 15 € | Hollow Knight, Stardew Valley, Genshin Impact, Honkai: Star Rail, Hades, Undertale y Hollow Knight: Silksong | 4 |
-| Disponibles y menos de 15 € | Hollow Knight, Genshin Impact, Hades y Hollow Knight: Silksong | 2 |
+| Solo disponibles | Los juegos con `available: true`: Hollow Knight, Celeste, Final Fantasy XVI, Genshin Impact, Monster Hunter Wilds, Mario Kart 8 Deluxe, Pokopia | 7 |
+| Solo menos de 15 € | Hollow Knight, Stardew Valley, Genshin Impact, Honkai: Star Rail | 4 |
+| Disponibles y menos de 15 € | Hollow Knight, Genshin Impact | 2 |
 
 Además comprobé que al desactivar el filtro de precio se vuelve a la lista del filtro de disponibilidad, y que al desactivar los dos vuelven los 10 juegos.
 
@@ -452,27 +452,6 @@ Además comprobé que al desactivar el filtro de precio se vuelve a la lista del
 
 ---
 
-## Enlaces a las fuentes consultadas
-
-- Guía de inicio de Vite: https://vite.dev/guide/
-- Aprender React: https://react.dev/learn
-- Primer componente de React: https://react.dev/learn/your-first-component
-- Escribir marcado con JSX: https://react.dev/learn/writing-markup-with-jsx
-- Pasar props a un componente: https://react.dev/learn/passing-props-to-a-component
-- Responder a eventos: https://react.dev/learn/responding-to-events
-- Estado de un componente: https://react.dev/learn/state-a-components-memory
-- Mostrar listas en React: https://react.dev/learn/rendering-lists
-- React con TypeScript: https://react.dev/learn/typescript
-- Node.js: https://nodejs.org/es/about
-- Qué es npm: https://docs.npmjs.com/about-npm
-- TypeScript en 5 minutos: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
-- MDN, `Array.prototype.map()`: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-- MDN, `Array.prototype.filter()`: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
-- MDN, funciones: https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Functions
-- MDN, funciones flecha: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-- MDN, selectores de clase: https://developer.mozilla.org/es/docs/Web/CSS/Class_selectors
-- Añadir código local a GitHub: https://docs.github.com/es/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github
-
 ## Enlace al repositorio de GitHub
 
-(https://github.com/Atthemyg/pgl-2dam/tree/main/ut1-fundamentos/Gameshelf)
+https://github.com/Atthemyg/pgl-2dam/tree/main/ut1-fundamentos/gameshelf
