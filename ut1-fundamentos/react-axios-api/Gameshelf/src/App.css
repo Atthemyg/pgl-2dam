@@ -1,0 +1,76 @@
+.app {
+  padding: 24px 32px 48px;
+}
+
+.app h1 {
+  margin: 16px 0 8px;
+  color: var(--accent);
+}
+
+.subtitle {
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filter-button {
+  font-size: 16px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid var(--accent-border);
+  transition: background 0.2s, color 0.2s;
+}
+
+.filter-button:hover {
+  border-color: var(--accent);
+}
+
+.filter-button.active {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.counter-text {
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  padding: 20px 16px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--social-bg);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  margin-bottom: 12px;
+}
+
+.card p {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
