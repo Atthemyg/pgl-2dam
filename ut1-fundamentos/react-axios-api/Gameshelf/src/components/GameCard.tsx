@@ -1,22 +1,20 @@
+import type { Game } from "../types/Game.ts";
+
 type GameCardProps = {
-  title: string;
-  genre: string;
-  price: number;
-  available: boolean;
+  game: Game;
 };
 
 export default function GameCard({
-  title,
-  genre,
-  price,
-  available,
+  game
 }: GameCardProps) {
   return (
     <article className="card">
-      <h2>{title}</h2>
-      <p>Género: {genre}</p>
-      <p>Precio: {price} €</p>
-      <p>{available ? "Disponible" : "No disponible"}</p>
+      <h2>{game.name}</h2>
+      <p>Género: {game.genre ?? "Sin género disponible"}</p>
+      <p>
+        Lanzamiento en Europa:{" "}
+        Fecha de lanzamiento: {game.releaseDate?.Europe ?? "Sin dato disponible"}
+      </p>
     </article>
   );
 }
