@@ -16,7 +16,7 @@ function App() {
         async function loadGames() {
             try {
                 const response = await axios.get<Game[]>(API_URL);
-                setGames(response.data.slice(0, 15));
+                setGames(response.data);
             } catch (error) {
                 console.log(error);
                 setError("No se pudo cargar el catalogo. Intentelo de nuevo más tarde");
