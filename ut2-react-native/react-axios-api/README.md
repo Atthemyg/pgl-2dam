@@ -101,6 +101,188 @@ Se utiliza el método de arrays `.slice()` justo antes de aplicar el `.map()`. E
 ```
 games.slice(0, 5).map((game) => ( ... ))
 ```
+---
+
+## Funcionamiento
+
+### `main.tsx`
+
+Este archivo es el **punto de entrada** de la aplicación. Su función principal es tomar el componente principal (`App`), conectarlo con el archivo HTML real del navegador y arrancar React.
+
+---
+
+#### 1. Importaciones (`Imports`)
+* **`import { StrictMode } from 'react'`**: Importa una herramienta de React que ayuda a detectar problemas potenciales en el código durante la etapa de desarrollo (hace comprobaciones y advertencias adicionales).
+
+* **`import { createRoot } from 'react-dom/client'`**: Importa el método oficial de React 18+ para inicializar y renderizar una aplicación dentro del DOM (la estructura de la página web).
+
+* **`import App from './App.tsx'`**: Importa el componente raíz de la aplicación (el archivo con el catálogo de videojuegos que revisamos antes).
+
+---
+
+#### 2. Inicialización y Renderizado (`createRoot`)
+* **`document.getElementById('root')`**: Busca en el archivo `index.html` de tu proyecto un contenedor físico (normalmente un `<div id="root"></div>`) donde se va a dibujar toda la aplicación.
+* **El signo de exclamación (`!`)**: Es un operador de TypeScript (Non-null assertion operator). Le asegura a TypeScript que ese elemento con ID "root" realmente existe en el HTML y que no va a ser `null`.
+
+* **`createRoot(...)`**: Crea la raíz de React asociada a ese contenedor del HTML.
+
+* **`.render(...)`**: Dibuja y monta los componentes en la pantalla.
+
+---
+
+#### 3. Componentes Renderizados
+* **`<StrictMode>`**: Envuelve a la aplicación. No dibuja nada visual en la pantalla, pero activa advertencias y revisiones estrictas en la consola para ayudarte a escribir mejor código.
+
+* **`<App />`**: Es el componente principal que contiene toda la lógica del catálogo de videojuegos. Al colocarse aquí, se convierte en el nodo raíz del que colgará el resto de la web.
+
+---
+
+### `types/Game.ts`
+
+Este archivo define la estructura de datos estricta (el "contrato") que debe cumplir cualquier objeto que represente a un videojuego dentro de la aplicación. Ayuda a que el editor de código ofrezca autocompletado y detecte errores antes de ejecutar la app.
+
+---
+
+#### 1. Exportación del Tipo (`export type Game`)
+* **`export`**: Permite que este tipo de dato pueda ser importado y reutilizado en otros archivos del proyecto (como en `App.tsx` mediante `import type { Game } ...`).
+
+* **`type Game = { ... }`**: Declara un nuevo tipo personalizado en TypeScript llamado `Game`.
+
+---
+
+#### 2. Propiedades Obligatorias
+Son los datos que el videojuego **sí o sí** debe contener. Si falta alguno de estos, TypeScript marcará un error:
+* **`id: number;`**: El identificador único del videojuego en la base de datos (un número).
+
+* **`name: string;`**: El título o nombre del videojuego (una cadena de texto).
+
+---
+
+#### 3. Propiedades Opcionales (Operador `?`)
+El símbolo de interrogación `?` indica que estas propiedades son **opcionales**. El videojuego puede o no traer esta información desde la API y la aplicación no se romperá:
+
+* **`genre?: string;`**: El género del videojuego (por ejemplo: "Platformer", "RPG"). Es opcional porque algunas APIs de prueba pueden no tener este dato en todos los registros.
+* **`releaseDate?: { ... };`**: Un objeto anidado opcional que guarda las fechas de lanzamiento divididas por regiones geográficas.
+
+  * **`Europe?: string;`**: Fecha de lanzamiento en Europa (texto).
+
+  * **`Japan?: string;`**: Fecha de lanzamiento en Japón (texto).
+
+  * **`NorthAmerica?: string;`**: Fecha de lanzamiento en Norteamérica (texto).
+
+  * **`Australia?: string;`**: Fecha de lanzamiento en Australia (texto).
+
+---
+
+### `App.tsx`
+
+Este componente principal (`App`) se encarga de conectar con una API externa, descargar un catálogo de videojuegos de Nintendo Switch y renderizarlos en la pantalla controlando los estados de carga y error.
+
+---
+
+#### 1. Importaciones (`Imports`)
+* **`import { useEffect, useState } from "react";`**: Trae los Hooks básicos de React. `useState` maneja la memoria local del componente y `useEffect` controla los efectos secundarios (como llamadas a APIs).
+* **`import axios from "axios";`**: Importa la librería cliente HTTP para realizar la petición `GET` al servidor de datos.
+
+* **`import GameCard from "./components/GameCard";`**: Importa el subcomponente encargado de la representación visual individual de cada juego.
+
+* **`import "./App.css";`**: Carga la hoja de estilos CSS correspondiente para aplicar el diseño visual.
+
+* **`import type { Game } from "./types/Game";`**: Importa la interfaz o tipo de TypeScript para asegurar el autocompletado y tipado estricto del objeto de tipo videojuego.
+
+---
+
+#### 2. Configuración
+* **`const API_URL = "https://sampleapis.com";`**: Define la dirección URL estática de la API pública que aloja el catálogo de videojuegos.
+
+---
+
+#### 3. Estados del Componente
+* **`games`**: Almacena el listado de juegos como un array de objetos tipo `Game`. Empieza vacío (`[]`).
+
+* **`loading`**: Interruptor booleano (`true`/`false`) para saber si la aplicación está descargando datos o si ya terminó.
+
+* **`error`**: Almacena un mensaje en formato string si la petición falla, o se mantiene en `null` si todo va bien.
+
+---
+
+#### 4. Ciclo de Vida y Petición Asíncrona (`useEffect`)
+El bloque `useEffect` se ejecuta una única vez al renderizarse el componente por primera vez debido a su array de dependencias vacío `[]`.
+* **`try`**: Lanza la petición HTTP. Si es exitosa, guarda los datos recibidos mediante `setGames`.
+
+* **`catch`**: Si el servidor falla o no hay internet, captura el error en la consola y setea un mensaje amigable para el usuario mediante `setError`.
+
+* **`finally`**: Sin importar si la petición fue exitosa o fallida, cambia `loading` a `false` para ocultar la pantalla de carga.
+
+* **`loadGames()`**: Invoca la función asíncrona inmediatamente tras ser definida.
+
+---
+
+#### 5. Renderizado Condicional de la Interfaz
+El componente retorna una estructura HTML semántica utilizando evaluaciones lógicas (`&&`) para mostrar la interfaz correcta según el estado actual:
+* **Cargando**: Muestra `<p role="status">` únicamente si `loading` es verdadero.
+
+* **Error**: Muestra `<p role="alert">` con el mensaje informativo si `error` contiene texto.
+* **Lista Vacía**: Si terminó de cargar, no hay error y el array de juegos tiene longitud cero, avisa que la API no devolvió datos.
+
+* **Catálogo**: Si terminó de cargar, no hay errores y existen juegos, recorre el array mediante `.map()` y genera un componente `<GameCard>` por cada videojuego, asignándole obligatoriamente su propiedad única `key={game.id}`.
+
+---
+
+#### 6. Exportación
+* **`export default App;`**: Hace que este componente esté disponible para ser importado e inicializado desde el archivo raíz de la aplicación (`main.tsx` o `index.js`).
+
+---
+
+### `componentes/GameCard.tsx`
+
+Este componente es de tipo **presentacional** o "tonto" (dumb component). Su única responsabilidad es recibir los datos de un videojuego específico a través de sus propiedades (`props`) y maquetar su interfaz visual de forma segura.
+
+---
+
+#### 1. Importaciones y Tipado de `Props`
+* **`import type { Game } from "../types/Game.ts";`**: Trae la estructura de datos que definimos en el archivo de tipos para asegurarse de que el objeto del juego contenga las propiedades correctas.
+
+* **`type GameCardProps = { game: Game; };`**: Define la estructura de las propiedades (`props`) que este componente necesita obligatoriamente para funcionar. En este caso, exige recibir un objeto llamado `game` que cumpla con el tipo `Game`.
+
+---
+
+#### 2. Declaración del Componente y Desestructuración
+* **`export default function GameCard({ game }: GameCardProps)`**: Declara y exporta el componente por defecto. Utiliza la **desestructuración** directamente en los argumentos (`{ game }`) para extraer el objeto del juego limpiamente sin tener que escribir `props.game` en cada línea.
+
+---
+
+#### 3. Renderizado Seguro (Estructura HTML)
+El componente retorna una etiqueta semántica `<article className="card">` para agrupar visualmente la información de la tarjeta utilizando dos estrategias clave de TypeScript y JavaScript moderno:
+
+* **`{game.name}`**: Muestra el nombre del juego directamente dentro de un encabezado `<h2>` (ya que es un dato obligatorio).
+
+* **Operador de Coalescencia Nula (`??`) en el Género**: 
+  * `game.genre ?? "Sin género disponible"`
+  * Como el género es opcional en nuestro tipo `Game`, si la API devuelve este valor vacío (`null` o `undefined`), el operador `??` actúa como un salvavidas y pinta el texto por defecto *"Sin género disponible"* en lugar de dejar la pantalla en blanco.
+* **Encadenamiento Opcional (`?.`) y Coalescencia Nula (`??`) en la Fecha**:
+  * `game.releaseDate?.Europe ?? "Sin dato disponible"`
+  * Aquí se combinan dos niveles de seguridad. El punto e interrogación (`?.`) evita que la aplicación se rompa si el objeto completo `releaseDate` no existe en la API. Si todo ese camino resulta estar vacío, el operador `??` vuelve a saltar para pintar *"Sin dato disponible"*.
+
+---
+
+### `App.css`
+
+Este archivo se encarga de dar toda la **identidad visual y el diseño estructurado** a la aplicación. En lugar de un diseño web genérico, mi proyecto aplica una **estética "retro / arcade" (estilo píxel de videojuegos)** muy marcada mediante las siguientes acciones principales:
+
+* **Establece una paleta de colores neón y temas oscuros:** Define variables de diseño para mantener la coherencia visual con fondos morados muy profundos, textos claros y colores muy llamativos (cian, rosa, amarillo, verde, naranja) inspirados en videojuegos clásicos.
+
+* **Configura fuentes tipográficas retro:** Importa y aplica la fuente de texto pixelada `'Press Start 2P'` tanto en el título principal de la aplicación como en los nombres de cada videojuego para forzar el aspecto arcade.
+
+* **Crea una estructura de catálogo automática y adaptable (Responsive):** Organiza los videojuegos utilizando una cuadrícula inteligente (`CSS Grid`). Esto hace que las tarjetas se acomoden solas en filas y columnas dependiendo del tamaño de la pantalla del dispositivo (móvil, tablet o monitor) sin romperse.
+
+* **Aplica un patrón dinámico de colores a las tarjetas:** Utiliza selectores avanzados para que las tarjetas de los videojuegos cambien de color de forma alterna y cíclica. Así, la interfaz rompe la monotonía mostrando bordes y sombras en rosa, amarillo, verde o cian a medida que aparecen en la lista.
+
+* **Añade interactividad visual (Efecto Hover):** Configura animaciones suaves para que cuando el usuario pase el ratón por encima de cualquier videojuego, la tarjeta parezca "elevarse" en 3D aumentando la profundidad de su sombra rígida.
+
+* **Da formato a los estados de la aplicación:** Decora de manera llamativa el indicador de carga y genera una caja de alerta de estilo "pixel-art" con bordes gruesos y sombras duras en color rojo si la conexión con la API llega a fallar.
+
+---
 
 ## Comprobaciones
 
