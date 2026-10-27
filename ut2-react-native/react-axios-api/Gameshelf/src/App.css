@@ -121,3 +121,28 @@ body {
   font-size: 0.95rem;
   color: var(--suave);
 }
+
+/* Filtro de género */
+.filters {
+  margin-bottom: 28px;
+}
+
+.filters label {
+  color: var(--suave);
+}
+
+.filters select {
+  margin-left: 8px;
+  padding: 8px 10px;
+  border: 3px solid var(--cian);
+  border-radius: 6px;
+  background: var(--tarjeta);
+  color: var(--texto);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: var(--rosa);
+}

@@ -161,7 +161,7 @@ Son los datos que el videojuego **sí o sí** debe contener. Si falta alguno de 
 #### 3. Propiedades Opcionales (Operador `?`)
 El símbolo de interrogación `?` indica que estas propiedades son **opcionales**. El videojuego puede o no traer esta información desde la API y la aplicación no se romperá:
 
-* **`genre?: string;`**: El género del videojuego (por ejemplo: "Platformer", "RPG"). Es opcional porque algunas APIs de prueba pueden no tener este dato en todos los registros.
+* **`genre?: string[];`**: Los géneros del videojuego (por ejemplo: `["Platformer", "RPG"]`). La API los devuelve como una **lista**, así que el tipo es `string[]` (antes estaba como `string`). Es opcional porque algunas APIs de prueba pueden no tener este dato en todos los registros.
 * **`releaseDate?: { ... };`**: Un objeto anidado opcional que guarda las fechas de lanzamiento divididas por regiones geográficas.
 
   * **`Europe?: string;`**: Fecha de lanzamiento en Europa (texto).
@@ -203,6 +203,7 @@ Este componente principal (`App`) se encarga de conectar con una API externa, de
 * **`loading`**: Interruptor booleano (`true`/`false`) para saber si la aplicación está descargando datos o si ya terminó.
 
 * **`error`**: Almacena un mensaje en formato string si la petición falla, o se mantiene en `null` si todo va bien.
+* **`selectedGenre`**: Género elegido en el filtro. `""` significa "todos los géneros".
 
 ---
 
@@ -218,18 +219,38 @@ El bloque `useEffect` se ejecuta una única vez al renderizarse el componente po
 
 ---
 
-#### 5. Renderizado Condicional de la Interfaz
+#### 5. Filtro por género
+
+La API **no trae precio** ni otros datos numéricos (solo `id`, `name`, `genre` y fechas), así que no se puede filtrar por "menos de X €". El filtro que hay es por **género**: un desplegable (`<select>`) con la opción "Todos" y una opción por cada género. Como la API tiene muchos géneros distintos, un desplegable ocupa mucho menos espacio que un botón por género. Al elegir uno, solo se ven los juegos que tienen ese género.
+
+Las opciones no se escribieron a mano: se calculan a partir de los juegos recibidos.
+
+```tsx
+const genres = [...new Set(games.flatMap((game) => game.genre ?? []))].sort();
+
+const visibleGames = selectedGenre === ""
+    ? games
+    : games.filter((game) => game.genre?.includes(selectedGenre));
+```
+
+* `flatMap` junta las listas de géneros de todos los juegos en una sola lista.
+* `new Set(...)` elimina los repetidos, `[... ]` lo vuelve a convertir en array y `.sort()` lo ordena.
+* `filter()` crea una lista nueva con los juegos cuyo `genre` incluye el género elegido (`includes`). `?.` evita errores si un juego no trae género.
+* `.map()` ahora recorre `visibleGames` en vez de `games`.
+* El desplegable es un **campo controlado**: su valor viene del estado (`value={selectedGenre}`) y `onChange` lo actualiza con `setSelectedGenre(e.target.value)`.
+
+#### 6. Renderizado Condicional de la Interfaz
 El componente retorna una estructura HTML semántica utilizando evaluaciones lógicas (`&&`) para mostrar la interfaz correcta según el estado actual:
 * **Cargando**: Muestra `<p role="status">` únicamente si `loading` es verdadero.
 
 * **Error**: Muestra `<p role="alert">` con el mensaje informativo si `error` contiene texto.
 * **Lista Vacía**: Si terminó de cargar, no hay error y el array de juegos tiene longitud cero, avisa que la API no devolvió datos.
 
-* **Catálogo**: Si terminó de cargar, no hay errores y existen juegos, recorre el array mediante `.map()` y genera un componente `<GameCard>` por cada videojuego, asignándole obligatoriamente su propiedad única `key={game.id}`.
+* **Catálogo**: Si terminó de cargar, no hay errores y existen juegos, muestra primero el desplegable de género y después recorre `visibleGames` (los juegos del género elegido) mediante `.map()` y genera un componente `<GameCard>` por cada videojuego, asignándole obligatoriamente su propiedad única `key={game.id}`.
 
 ---
 
-#### 6. Exportación
+#### 7. Exportación
 * **`export default App;`**: Hace que este componente esté disponible para ser importado e inicializado desde el archivo raíz de la aplicación (`main.tsx` o `index.js`).
 
 ---
@@ -258,8 +279,8 @@ El componente retorna una etiqueta semántica `<article className="card">` para 
 * **`{game.name}`**: Muestra el nombre del juego directamente dentro de un encabezado `<h2>` (ya que es un dato obligatorio).
 
 * **Operador de Coalescencia Nula (`??`) en el Género**: 
-  * `game.genre ?? "Sin género disponible"`
-  * Como el género es opcional en nuestro tipo `Game`, si la API devuelve este valor vacío (`null` o `undefined`), el operador `??` actúa como un salvavidas y pinta el texto por defecto *"Sin género disponible"* en lugar de dejar la pantalla en blanco.
+  * `game.genre?.join(", ") ?? "Sin género disponible"`
+  * El género es una lista y es opcional en nuestro tipo `Game`. `join(", ")` convierte la lista en un texto separado por comas (por ejemplo "Party, Racing"), y si la API no devuelve el género, `?.` evita el error y el operador `??` pinta el texto por defecto *"Sin género disponible"* en lugar de dejar la pantalla en blanco.
 * **Encadenamiento Opcional (`?.`) y Coalescencia Nula (`??`) en la Fecha**:
   * `game.releaseDate?.Europe ?? "Sin dato disponible"`
   * Aquí se combinan dos niveles de seguridad. El punto e interrogación (`?.`) evita que la aplicación se rompa si el objeto completo `releaseDate` no existe en la API. Si todo ese camino resulta estar vacío, el operador `??` vuelve a saltar para pintar *"Sin dato disponible"*.
@@ -279,6 +300,8 @@ Este archivo se encarga de dar toda la **identidad visual y el diseño estructur
 * **Aplica un patrón dinámico de colores a las tarjetas:** Utiliza selectores avanzados para que las tarjetas de los videojuegos cambien de color de forma alterna y cíclica. Así, la interfaz rompe la monotonía mostrando bordes y sombras en rosa, amarillo, verde o cian a medida que aparecen en la lista.
 
 * **Añade interactividad visual (Efecto Hover):** Configura animaciones suaves para que cuando el usuario pase el ratón por encima de cualquier videojuego, la tarjeta parezca "elevarse" en 3D aumentando la profundidad de su sombra rígida.
+
+* **Estiliza el filtro de género:** `.filters select` le da al desplegable borde neón, fondo de tarjeta y esquinas redondeadas, y cambia el color del borde al enfocarlo.
 
 * **Da formato a los estados de la aplicación:** Decora de manera llamativa el indicador de carga y genera una caja de alerta de estilo "pixel-art" con bordes gruesos y sombras duras en color rojo si la conexión con la API llega a fallar.
 
@@ -305,6 +328,12 @@ Este archivo se encarga de dar toda la **identidad visual y el diseño estructur
 <br>
 
 ![](img/3.png)
+
+- El filtro por género funciona: al elegir un género en el desplegable solo quedan los juegos que lo tienen, y "Todos" vuelve a mostrar el catálogo completo.
+
+<br>
+
+![](img/5.png)
 
 - La consola del navegador no muestra errores.
 

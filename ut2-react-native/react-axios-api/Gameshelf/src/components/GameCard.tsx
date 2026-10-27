@@ -10,7 +10,7 @@ export default function GameCard({
   return (
     <article className="card">
       <h2>{game.name}</h2>
-      <p>Género: {game.genre ?? "Sin género disponible"}</p>
+      <p>Género: {game.genre?.join(", ") ?? "Sin género disponible"}</p>
       <p>
         Lanzamiento en Europa:{" "}
         Fecha de lanzamiento: {game.releaseDate?.Europe ?? "Sin dato disponible"}

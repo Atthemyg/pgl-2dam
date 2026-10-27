@@ -10,6 +10,7 @@ function App() {
     const [games, setGames] = useState<Game[]>([]); // Estado de React es un dato que la aplicación va a recordar mientras esté abierta
     const [loading, setLoading] = useState(true); // Mostrar y esperar hasta que la app se ejecute
     const [error, setError] = useState<string | null>(null); // Devuelve un error en caso de que la peticion falle
+    const [selectedGenre, setSelectedGenre] = useState(""); // "" significa todos los géneros
 
 
     useEffect(() => {
@@ -26,6 +27,14 @@ function App() {
         }
         loadGames();
     }, []);
+
+    // Géneros distintos que hay en los datos (sin repetir y ordenados)
+    const genres = [...new Set(games.flatMap((game) => game.genre ?? []))].sort();
+
+    const visibleGames = selectedGenre === ""
+        ? games
+        : games.filter((game) => game.genre?.includes(selectedGenre));
+
     return (
         <main className="app">
             <h1>Gameshelf</h1>
@@ -40,11 +49,30 @@ function App() {
             )}
 
             {!loading && !error && games.length > 0 && (
-                <section className="catalog">
-                    {games.map((game) => (
-                        <GameCard key={game.id} game={game}/>                    
-                    ))}
-                </section>
+                <>
+                    <div className="filters">
+                        <label>
+                            Género:{" "}
+                            <select
+                                value={selectedGenre}
+                                onChange={(e) => setSelectedGenre(e.target.value)}
+                            >
+                                <option value="">Todos</option>
+                                {genres.map((genre) => (
+                                    <option key={genre} value={genre}>
+                                        {genre}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+
+                    <section className="catalog">
+                        {visibleGames.map((game) => (
+                            <GameCard key={game.id} game={game}/>
+                        ))}
+                    </section>
+                </>
             )}
         </main>
     )
