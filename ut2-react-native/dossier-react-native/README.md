@@ -1,56 +1,109 @@
-# Welcome to your Expo app 👋
+# Dossier de React Native con Expo y Android Studio
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Atteneri Bravo Barroso
 
-## Get started
+2ºDAM
 
-1. Install dependencies
+## Configuración
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+En la terminal, desde la carpeta donde he guardado el proyecto ejecuto:
 
 ```bash
-npm run reset-project
+npx create-expo-app@latest dossier-react-native --template default
+cd dossier-react-native
+code .
+npx expo start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+El creador de proyectos instalará Expo, TypeScript y la estructura de rutas de Expo Router. Si os pide confirmar la instalación, aceptad. Con el emulador de Android ya iniciado, pulsad **`a`** en la terminal del servidor de Expo. Si la aplicación no se abre, comprobad el dispositivo con `adb devices` y volved a arrancar el servidor.
 
-### Other setup steps
+> Las plantillas y su estructura evolucionan. Si el proyecto inicial incluye pantallas demostrativas, seguid la guía de limpieza de la plantilla que indique vuestra versión de Expo; conservad `src/app/_layout.tsx` y `src/app/index.tsx` (o `app/` cuando la plantilla no use `src/`). A partir de aquí, todos los ejemplos del dossier consideran `src/app/`.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+**Archivos básicos:** `package.json` enumera scripts y dependencias; `app.json` contiene la configuración de Expo; `tsconfig.json` configura TypeScript; `assets/` almacena imágenes; `src/app/` contiene las rutas de navegación.
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
+## Práctica 1. Hola Mundo
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+En `src/app/index.tsx` cread una pantalla que muestre el mensaje «¡Hola mundo! Soy [vuestro nombre]». Utilizad un `View` y un `Text`; aplicad fondo rosa, `flex: 1`, `justifyContent: 'center'` y `alignItems: 'center'`.
 
-## Join the community
+```tsx
+import { StyleSheet, Text, View } from 'react-native';
 
-Join our community of developers creating universal apps.
+export default function Index() {
+  return (
+    <View style={styles.pantalla}>
+      <Text>¡Hola mundo! Soy ...</Text>
+    </View>
+  );
+}
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+const styles = StyleSheet.create({
+  pantalla: {
+    alignItems: 'center',
+    backgroundColor: 'lightpink',
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
+```
+
+![](./imagenes/practica1.png)
+
+## Componentes básicos y layout
+
+### `View`, `Text` y `Button`
+
+`View` es un contenedor visual; equivale a una caja capaz de agrupar otros componentes. `Text` sirve para mostrar texto: no podemos escribir cadenas directamente dentro de un `View` sin envolverlas en `Text`. `Button` presenta un botón nativo con propiedades básicas: `title`, `onPress`, `color` y `accessibilityLabel`.
+
+Estos componentes se importan desde `react-native`, **también al usar Expo**. Un estado creado con `useState` permite actualizar la pantalla cuando cambia su valor:
+
+```tsx
+import { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+
+export default function ContadorScreen() {
+  const [contador, setContador] = useState(0);
+  return (
+    <View style={styles.caja}>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => setContador(n => n + 1)} />
+    </View>
+  );
+}
+const styles = StyleSheet.create({
+  caja: { alignItems: 'center', borderWidth: 2, padding: 20 },
+});
+```
+
+Cuando se pulsa el botón, `setContador` actualiza el estado y React vuelve a representar el componente. No es necesario modificar manualmente el texto de la pantalla.
+
+![](./imagenes/practica1-1.png)
+
+### Práctica 2. Contador con dos botones
+
+Partiendo del ejemplo anterior, cambiad el color del borde y del fondo, redondead las esquinas con `borderRadius` e incorporad otro botón que decremente el contador. Mostrad el valor en un `Text` y comprobad el resultado en Android Studio.
+
+**Cómo resolverla:** utilizad el mismo estado `contador` y dos funciones `onPress`, una con `setContador(n => n + 1)` y otra con `setContador(n => n - 1)`. Personalizad el contenedor mediante `StyleSheet.create()`; el `Button` nativo no admite la misma personalización que un `View`.
+
+### Separar pantallas, componentes y estilos
+
+Hasta ahora habéis escrito todo en un único archivo. En las siguientes prácticas separaremos los componentes reutilizables (`src/components/`) de las pantallas completas (`src/screens/`). Las pantallas que se abren desde Expo Router necesitan, además, un archivo de ruta dentro de `src/app/`.
+
+`StyleSheet.create()` permite guardar estilos reutilizables y evita llenar el JSX de objetos repetidos:
+
+```tsx
+const styles = StyleSheet.create({
+  contenedorCircular: {
+    backgroundColor: 'rgba(191, 186, 221, 0.54)',
+    borderRadius: 100,
+    padding: 20,
+  },
+});
+// En el JSX: <View style={styles.contenedorCircular}>...</View>
+```
+
+Podéis instalar extensiones de fragmentos de código (*snippets*), pero los atajos concretos dependen de la extensión: no son comandos de Expo.
+
+---
+
+![](./imagenes/practica2.png)

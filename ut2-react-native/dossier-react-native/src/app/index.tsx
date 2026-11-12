@@ -1,98 +1,60 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// Práctica 1. Hola Mundo
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+/* import { StyleSheet, Text, View } from 'react-native';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+export default function Index() {
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+    <View style={styles.pantalla}>
+      <Text>¡Hola mundo! Soy Atteneri</Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  pantalla: {
+    alignItems: 'center',
+    backgroundColor: 'lightpink',
     flex: 1,
     justifyContent: 'center',
-    flexDirection: 'row',
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+}); */
+
+/*
+import { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+
+export default function ContadorScreen() {
+  const [contador, setContador] = useState(0);
+  return (
+    <View style={styles.caja}>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => setContador(n => n + 1)} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  caja: { alignItems: 'center', borderWidth: 2, padding: 20 },
+});*/
+
+import { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+
+export default function ContadorScreen() {
+  const [contador, setContador] = useState(0);
+  return (
+    <View style={styles.contenedorCircular}>
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={() => setContador(n => n + 1)} />
+      <Button title="Decrementar" onPress={() => setContador(n => n - 1)} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  contenedorCircular: {
+    backgroundColor: 'rgba(191, 186, 221, 0.54)',
+    borderRadius: 100,
+    padding: 50,
   },
 });
