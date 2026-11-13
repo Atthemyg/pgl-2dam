@@ -6,6 +6,8 @@ Atteneri Bravo Barroso
 
 ## Configuración
 
+**PENDIENTE**: añadir demás comandos
+
 En la terminal, desde la carpeta donde he guardado el proyecto ejecuto:
 
 ```bash
@@ -107,3 +109,110 @@ Podéis instalar extensiones de fragmentos de código (*snippets*), pero los ata
 ---
 
 ![](./imagenes/practica2.png)
+
+
+### Práctica 3. `InicioScreen` y estilos separados
+
+Cread `src/screens/InicioScreen.tsx` para colocar el contador de la práctica 2. En `src/app/index.tsx`, importad y mostrad `<InicioScreen />`. Los estilos deberán declararse mediante `StyleSheet.create()`.
+
+**Para conservar las prácticas:** en este momento podéis guardar el «Hola mundo» como `src/screens/HolaMundoScreen.tsx`. Después crearemos un índice de rutas para abrir cada pantalla por separado; no eliminéis el código del primer ejercicio. `src/screens/` contiene la implementación y `src/app/` actuará como enlace a ella cuando configuremos las rutas.
+
+```tsx
+// src/app/index.tsx (hasta crear el menú general)
+import InicioScreen from '../screens/InicioScreen';
+export default function Index() {
+  return <InicioScreen />;
+}
+```
+
+Revisad que ambos archivos funcionen, que no haya errores de importación y que el contador conserve su comportamiento.
+
+![](./imagenes/practica3.png)
+
+---
+
+
+### Layout con Flexbox
+
+React Native emplea Flexbox para distribuir componentes. Frente al CSS del navegador, los contenedores se organizan **en columna por defecto** (`flexDirection: 'column'`) y no necesitan `display: 'flex'`. Las unidades numéricas de `width`, `height`, `margin` o `padding` se expresan normalmente como unidades lógicas, sin añadir `px`.
+
+Con `flex: 1` un contenedor ocupa el espacio libre. `flexDirection: 'row'` coloca los hijos en horizontal y `flexDirection: 'column'` los coloca en vertical.
+
+```tsx
+// src/components/Caja.tsx
+import { StyleSheet, Text, View } from 'react-native';
+
+type Props = { nombre: string; bg?: string };
+export default function Caja({ nombre, bg = 'green' }: Props) {
+  return (
+    <View style={[styles.caja, { backgroundColor: bg }]}>
+      <Text>{nombre}</Text>
+    </View>
+  );
+}
+const styles = StyleSheet.create({
+  caja: { height: 100, width: 100, justifyContent: 'center', alignItems: 'center' },
+});
+```
+
+La sintaxis `style={[styles.caja, { backgroundColor: bg }]}` combina un estilo base y un valor personalizado, también se puede utilizar la extensión de objetos con `...styles.caja`.
+
+![](./imagenes/practica3-1.png)
+
+---
+
+### Práctica 4. Tres cajas
+
+Cread una pantalla `PrincipalScreen` con el texto «Contenedor Principal» y un `View` para el escenario. Dentro colocad tres componentes `Caja` de 100 × 100 y enviadles colores diferentes mediante propiedades. El escenario debe tener `flex: 1`.
+
+![](./imagenes/practica4.png)
+
+---
+
+
+### Reparto del espacio con `flex`
+
+`flex` controla cómo se reparte el espacio libre entre elementos hermanos. Dos hijos con `flex: 1` comparten ese espacio; si uno tiene `flex: 2`, recibe el doble de la parte asignada al que tiene `flex: 1`, siempre que las restantes restricciones de tamaño lo permitan.
+
+**Atención:** si una caja tiene `height: 100`, el efecto de `flex` puede verse condicionado por esa altura. Para observar claramente el reparto en la siguiente práctica, podéis usar una variante de la caja sin altura fija.
+
+![](./imagenes/practica4-1.png)
+
+---
+
+### Práctica 5. Modificar `flex` dinámicamente
+
+Añadid a cada caja dos botones: uno incrementará su valor de `flex` y otro lo disminuirá. Mostrad el valor actual de cada caja y comprobad cómo se reorganiza el espacio. Guardad los valores en estados independientes y evitad valores negativos cuando no tengan sentido para vuestro diseño.
+
+```tsx
+const [valorFlex, setValorFlex] = useState(0);
+// Aplicad { flex: valorFlex } al contenedor de la caja.
+// Botones: setValorFlex(n => n + 1) y setValorFlex(n => Math.max(0, n - 1)).
+```
+
+El resultado debe seguir siendo consultable cuando paséis a los siguientes ejercicios.
+
+![](./imagenes/practica5.png)
+
+---
+
+
+### `TouchableOpacity` y `TouchableHighlight`
+
+Los botones nativos permiten poca personalización. React Native incluye componentes que reaccionan al tacto y pueden envolver una interfaz personalizada. `TouchableOpacity` reduce la opacidad al pulsar; `TouchableHighlight` muestra un resaltado. Ambos utilizan `onPress`.
+
+```tsx
+import { Alert, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+
+<TouchableHighlight onPress={() => Alert.alert('Pulsado')} underlayColor="#ddd">
+  <Text>Botón destacado</Text>
+</TouchableHighlight>
+
+<TouchableOpacity onPress={() => Alert.alert('Pulsado')}>
+  <Text>Botón con opacidad</Text>
+</TouchableOpacity>
+```
+
+En aplicaciones actuales también puede utilizarse `Pressable`, pero para observar las diferencias entre los componentes táctiles trabajaremos aquí con los dos componentes anteriores.
+
+![](./imagenes/practica5-1.png)
