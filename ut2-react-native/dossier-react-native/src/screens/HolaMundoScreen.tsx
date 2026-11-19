@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
-import InicioScreen from '../screens/InicioScreen';
+import { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
-export default function HolaMundoScreen() {
+export default function Index() {
   return (
     <View style={styles.pantalla}>
       <Text>¡Hola mundo! Soy Atteneri</Text>

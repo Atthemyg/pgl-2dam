@@ -359,6 +359,8 @@ const elegida = imagenes[indice];
 
 Los archivos `estrella.png` y `gato.png` deben existir antes de ejecutar el ejemplo. La posición seleccionada puede almacenarse en un estado.
 
+![](./imagenes/practica9-2.png)
+
 ### Práctica 9.1. Imagen aleatoria
 
 Partiendo de una colección de imágenes locales, añadid un botón que elija aleatoriamente una imagen y la muestre. Utilizad `Math.floor(Math.random() * imagenes.length)` y actualizad el índice mediante `useState`.
@@ -367,9 +369,69 @@ Partiendo de una colección de imágenes locales, añadid un botón que elija al
 
 Para evitar que el contenido quede debajo de la barra de estado o de las áreas reservadas de Android, utilizad `SafeAreaView` importado desde **`react-native-safe-area-context`**. En proyectos con Expo Router, podéis aplicarlo a pantallas que lo necesiten o gestionar las zonas seguras desde un contenedor compartido. No utilizaremos la antigua importación de `SafeAreaView` desde `react-native`.
 
+![](./imagenes/practica9.1.png)
+
 ---
 
 
 ### Más propiedades de layout y cálculo
 
 `gap`, `rowGap` y `columnGap` permiten espaciar elementos; `alignContent` distribuye líneas cuando usamos `flexWrap: 'wrap'`; `position` admite `'relative'` y `'absolute'`. El componente `Text` dispone de `adjustsFontSizeToFit` y `numberOfLines` para adaptar un resultado largo al ancho disponible.
+
+![](./imagenes/practica9.1-1.png)
+
+
+### Práctica 10. Calculadora
+
+Reproducid la calculadora de la figura: pantalla de resultado y filas de teclas numéricas y de operaciones. Construid los botones como componentes reutilizables con `TouchableOpacity`. Utilizad Flexbox para las filas y mantened el resultado en un estado. Deben funcionar las operaciones que decidáis implementar según el diseño de referencia; evitad evaluar directamente cadenas arbitrarias con `eval`.
+
+**Organización recomendada:** `CalculadoraScreen.tsx` contendrá la interfaz, y un componente `TeclaCalculadora.tsx` definirá el aspecto y la interacción de cada tecla. Conservad la práctica 10: la práctica siguiente extraerá su lógica a un hook, pero no debe eliminar su resultado.
+
+![](./imagenes/practica10.png)
+
+---
+
+
+## Estructura de carpetas
+
+Después de las primeras prácticas vamos a organizar de manera más completa **el único proyecto Expo del dossier**. No hace falta crear un proyecto nuevo. Tomad esta estructura como referencia y añadid carpetas cuando realmente se utilicen:
+
+```text
+src/
+├── app/
+│   ├── _layout.tsx
+│   ├── index.tsx                # Índice general de prácticas
+│   ├── practica01.tsx
+│   ├── practica02.tsx
+│   ├── ...
+│   └── practica40.tsx
+├── screens/                    # Pantallas con la implementación
+├── components/                 # Componentes reutilizables
+├── hooks/                      # Hooks personalizados
+├── context/                    # Estados compartidos
+├── api/                        # Peticiones HTTP
+├── db/                         # SQLite y consultas
+├── navigation/                 # Ayudas de navegación, si se necesitan
+└── theme/                      # Estilos, colores y constantes
+assets/                          # Imágenes y recursos
+```
+
+Los archivos dentro de `src/app/` son **rutas de Expo Router**. Podéis exportar desde ellos una pantalla definida en `src/screens/`, por ejemplo: `export { default } from '../screens/InicioScreen';`. Para ejercicios con varias pantallas (Stack, Drawer, Tabs) crearemos una **carpeta de rutas exclusiva para ese ejercicio**, con su propio `_layout.tsx`.
+
+Para que no desaparezcan las prácticas 1–10, cread ahora las rutas necesarias y transformad `src/app/index.tsx` en un **índice de ejercicios**. El ejemplo siguiente puede ampliarse conforme avancéis:
+
+```tsx
+import { Link } from 'expo-router';
+import { ScrollView, Text } from 'react-native';
+export default function Index() {
+  return (
+    <ScrollView contentContainerStyle={{ padding: 20, gap: 16 }}>
+      <Text>Prácticas de React Native con Expo</Text>
+      <Link href="/practica01">Práctica 1</Link>
+      <Link href="/practica02">Práctica 2</Link>
+    </ScrollView>
+  );
+}
+```
+
+Cada ruta deberá apuntar a un archivo real: por ejemplo, `src/app/practica01.tsx` exporta `HolaMundoScreen`. Ampliad el índice según vayáis creando prácticas. **No situéis componentes auxiliares sueltos dentro de `src/app/`**, porque Expo Router puede interpretarlos como rutas.

@@ -1,18 +1,19 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { Stack } from 'expo-router';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
-
-SplashScreen.preventAutoHideAsync();
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <Stack>
+      <Stack.Screen name="index" options={{ title: 'Índice de Prácticas' }} />
+      <Stack.Screen name="practica01" options={{ title: 'Práctica 1' }} />
+      <Stack.Screen name="practica02" options={{ title: 'Práctica 2' }} />
+      <Stack.Screen name="practica03" options={{ title: 'Práctica 3' }} />
+      <Stack.Screen name="practica04" options={{ title: 'Práctica 4' }} />
+      <Stack.Screen name="practica05" options={{ title: 'Práctica 5' }} />
+      <Stack.Screen name="practica06" options={{ title: 'Práctica 6' }} />
+      <Stack.Screen name="practica07" options={{ title: 'Práctica 7' }} />
+      <Stack.Screen name="practica08" options={{ title: 'Práctica 8' }} />
+      <Stack.Screen name="practica09" options={{ title: 'Práctica 9' }} />
+      <Stack.Screen name="practica10" options={{ title: 'Práctica 10' }} />
+    </Stack>
   );
 }
