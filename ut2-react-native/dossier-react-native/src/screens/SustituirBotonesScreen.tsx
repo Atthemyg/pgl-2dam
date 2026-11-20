@@ -1,10 +1,15 @@
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 
-export default function PrincipalScreen() {
+export default function SustituirBotonesScreen() {
     const [valorFlex1, setValorFlex1] = useState(1);
     const [valorFlex2, setValorFlex2] = useState(1);
     const [valorFlex3, setValorFlex3] = useState(1);
+
+    const aumentarFlex = (setter: React.Dispatch<React.SetStateAction<number>>) => {
+        Alert.alert('Flex aumentado', 'Se ha sumado +1 al valor flex');
+        setter(n => n + 1);
+    };
 
     return (
         <View style={styles.contenedorPrincipal}>
@@ -17,7 +22,7 @@ export default function PrincipalScreen() {
                         <TouchableOpacity style={styles.boton} onPress={() => setValorFlex1(n => Math.max(0, n - 1))}>
                             <Text style={styles.textoBoton}>-</Text>
                         </TouchableOpacity>
-                        <TouchableHighlight style={styles.boton} underlayColor="#ddd" onPress={() => setValorFlex1(n => n + 1)}>
+                        <TouchableHighlight style={styles.boton} underlayColor="#ddd" onPress={() => aumentarFlex(setValorFlex1)}>
                             <Text style={styles.textoBoton}>+</Text>
                         </TouchableHighlight>
                     </View>
@@ -29,7 +34,7 @@ export default function PrincipalScreen() {
                         <TouchableOpacity style={styles.boton} onPress={() => setValorFlex2(n => Math.max(0, n - 1))}>
                             <Text style={styles.textoBoton}>-</Text>
                         </TouchableOpacity>
-                        <TouchableHighlight style={styles.boton} underlayColor="#ddd" onPress={() => setValorFlex2(n => n + 1)}>
+                        <TouchableHighlight style={styles.boton} underlayColor="#ddd" onPress={() => aumentarFlex(setValorFlex2)}>
                             <Text style={styles.textoBoton}>+</Text>
                         </TouchableHighlight>
                     </View>
@@ -41,7 +46,7 @@ export default function PrincipalScreen() {
                         <TouchableOpacity style={styles.boton} onPress={() => setValorFlex3(n => Math.max(0, n - 1))}>
                             <Text style={styles.textoBoton}>-</Text>
                         </TouchableOpacity>
-                        <TouchableHighlight style={styles.boton} underlayColor="#ddd" onPress={() => setValorFlex3(n => n + 1)}>
+                        <TouchableHighlight style={styles.boton} underlayColor="#ddd" onPress={() => aumentarFlex(setValorFlex3)}>
                             <Text style={styles.textoBoton}>+</Text>
                         </TouchableHighlight>
                     </View>

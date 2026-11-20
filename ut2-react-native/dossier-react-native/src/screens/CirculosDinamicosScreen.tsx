@@ -6,7 +6,7 @@ interface Circulo {
     color: string;
 }
 
-export default function PrincipalScreen() {
+export default function CirculosDinamicosScreen() {
     const [circulos, setCirculos] = useState<Circulo[]>([]);
     const [tipoWrap, setTipoWrap] = useState<'wrap' | 'nowrap'>('wrap');
     const [tipoDirection, setTipoDirection] = useState<'row' | 'column'>('row');

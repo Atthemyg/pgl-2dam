@@ -13,52 +13,11 @@ export default function Index() {
       <Link href="/practica08">Práctica 8</Link>
       <Link href="/practica09">Práctica 9</Link>
       <Link href="/practica10">Práctica 10</Link>
+      <Link href="/practica11">Práctica 11</Link>
+      <Link href="/practica12">Práctica 12</Link>
+      <Link href="/practica13">Práctica 13</Link>
+      <Link href="/practica14">Práctica 14</Link>
+      <Link href="/practica15">Práctica 15</Link>
     </ScrollView>
   );
 }
-
-/*import { StyleSheet, Text, View } from 'react-native';
-import InicioScreen from '../screens/InicioScreen';
-//import PrincipalScreen from '../screens/PrincipalScreen';
-import CalculadoraScreen from '../screens/CalculadoraScreen';
-
-export default function Index() {
-  return <CalculadoraScreen />;
-}*/
-
-// Práctica 1. Hola Mundo
-
-/*export default function Index() {
-  return (
-    <View style={styles.pantalla}>
-      <Text>¡Hola mundo! Soy Atteneri</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  pantalla: {
-    alignItems: 'center',
-    backgroundColor: 'lightpink',
-    flex: 1,
-    justifyContent: 'center',
-  },
-});*/
-
-/*
-import { useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
-
-export default function ContadorScreen() {
-  const [contador, setContador] = useState(0);
-  return (
-    <View style={styles.caja}>
-      <Text>Contador: {contador}</Text>
-      <Button title="Incrementar" onPress={() => setContador(n => n + 1)} />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  caja: { alignItems: 'center', borderWidth: 2, padding: 20 },
-});*/

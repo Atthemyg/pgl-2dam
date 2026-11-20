@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { Alert, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-type Props = {
-    nombre: string;
+type CajaProps = {
     valorFlex: number;
     onRestar: () => void;
     onSumar: () => void;
     style?: StyleProp<ViewStyle>;
 };
 
-function Caja({ nombre, valorFlex, onRestar, onSumar, style }: Props) {
+function Caja({ valorFlex, onRestar, onSumar, style }: CajaProps) {
     return (
-        <View style={[styles.porDefecto, style, { flex: valorFlex }]}>
-            <Text style={styles.nombreCaja}>{nombre}</Text>
+        <View style={[styles.cajaBase, style, { flex: valorFlex }]}>
             <Text style={styles.texto}>{valorFlex}</Text>
             <View style={styles.botones}>
                 <TouchableOpacity style={styles.boton} onPress={onRestar}>
@@ -26,7 +24,7 @@ function Caja({ nombre, valorFlex, onRestar, onSumar, style }: Props) {
     );
 }
 
-export default function PrincipalScreen() {
+export default function EstiloPorPropsScreen() {
     const [valorFlex1, setValorFlex1] = useState(1);
     const [valorFlex2, setValorFlex2] = useState(1);
     const [valorFlex3, setValorFlex3] = useState(1);
@@ -42,35 +40,21 @@ export default function PrincipalScreen() {
 
             <View style={styles.escenario}>
                 <Caja
-                    nombre="Caja A"
                     valorFlex={valorFlex1}
                     onRestar={() => setValorFlex1(n => Math.max(0, n - 1))}
                     onSumar={() => aumentarFlex(setValorFlex1)}
                 />
 
                 <Caja
-                    nombre="Caja B"
                     valorFlex={valorFlex2}
-                    style={{
-                        backgroundColor: '#769ed1',
-                        borderRadius: 20,
-                        borderWidth: 7,
-                        borderColor: '#1b3b6f',
-                    }}
+                    style={{ backgroundColor: '#769ed1' }}
                     onRestar={() => setValorFlex2(n => Math.max(0, n - 1))}
                     onSumar={() => aumentarFlex(setValorFlex2)}
                 />
 
                 <Caja
-                    nombre="Caja C"
                     valorFlex={valorFlex3}
-                    style={{
-                        backgroundColor: '#346417',
-                        borderRadius: 12,
-                        borderWidth: 4,
-                        borderStyle: 'dashed',
-                        borderColor: 'white',
-                    }}
+                    style={{ backgroundColor: '#346417' }}
                     onRestar={() => setValorFlex3(n => Math.max(0, n - 1))}
                     onSumar={() => aumentarFlex(setValorFlex3)}
                 />
@@ -100,26 +84,19 @@ const styles = StyleSheet.create({
         padding: 15,
         gap: 15,
     },
-    porDefecto: {
-        width: 120,
-        height: 110,
+    cajaBase: {
+        width: 100,
+        height: 100,
         backgroundColor: '#7f624e',
         borderWidth: 2,
         borderColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    nombreCaja: {
-        color: 'yellow',
-        fontWeight: 'bold',
-        fontSize: 15,
-        marginBottom: 2,
-    },
     texto: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16,
-        marginBottom: 4,
     },
     botones: {
         flexDirection: 'row',

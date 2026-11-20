@@ -20,10 +20,16 @@ const VALORES_JUSTIFY: JustifyContentType[] = [
     'space-evenly',
 ];
 
-export default function PrincipalScreen() {
+const IMAGENES_LOCALES = [
+    require('../../assets/images/icon.png'),
+    require('../../assets/images/react-logo.png'),
+];
+
+export default function ImagenesLocalesScreen() {
     const [textoInput, setTextoInput] = useState<string>('space-around');
     const [justifyActual, setJustifyActual] = useState<JustifyContentType>('space-around');
-    const [alignActual, setAlignActual] = useState<AlignItemsType>('center');
+    const [alignActual, setAlignActual] = useState<AlignItemsType>('flex-end');
+    const [indiceImagen, setIndiceImagen] = useState<number>(0);
 
     const manejarCambioTexto = (texto: string) => {
         setTextoInput(texto);
@@ -34,11 +40,15 @@ export default function PrincipalScreen() {
         }
     };
 
+    const alternarImagenLocal = () => {
+        setIndiceImagen((prev) => (prev + 1) % IMAGENES_LOCALES.length);
+    };
+
     return (
         <View style={styles.contenedorPrincipal}>
             <TextInput
                 style={styles.input}
-                placeholder="center, space-around, space-between..."
+                placeholder="center, space-around..."
                 value={textoInput}
                 onChangeText={manejarCambioTexto}
                 autoCapitalize="none"
@@ -46,50 +56,51 @@ export default function PrincipalScreen() {
 
             <View style={styles.panelBotones}>
                 <TouchableOpacity
-                    style={[styles.boton, alignActual === 'stretch' && styles.botonActivo]}
+                    style={styles.boton}
                     onPress={() => setAlignActual('stretch')}
                 >
                     <Text style={styles.textoBoton}>STRETCH</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.boton, alignActual === 'center' && styles.botonActivo]}
+                    style={styles.boton}
                     onPress={() => setAlignActual('center')}
                 >
                     <Text style={styles.textoBoton}>CENTER</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.boton, alignActual === 'flex-start' && styles.botonActivo]}
+                    style={styles.boton}
                     onPress={() => setAlignActual('flex-start')}
                 >
                     <Text style={styles.textoBoton}>FLEX-START</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.boton, alignActual === 'flex-end' && styles.botonActivo]}
+                    style={styles.boton}
                     onPress={() => setAlignActual('flex-end')}
                 >
                     <Text style={styles.textoBoton}>FLEX-END</Text>
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.panelEstado}>
-                <Text style={styles.textoEstado}>
-                    justifyContent: {justifyActual}  |  alignItems: {alignActual}
-                </Text>
-            </View>
+            <TouchableOpacity style={styles.botonSecundario} onPress={alternarImagenLocal}>
+                <Text style={styles.textoBoton}>CAMBIAR IMAGEN LOCAL</Text>
+            </TouchableOpacity>
 
             <View
                 style={[
                     styles.escenario,
-                    {
-                        flexWrap: 'nowrap',
-                        justifyContent: justifyActual,
-                        alignItems: alignActual,
-                    },
+                    { justifyContent: justifyActual, alignItems: alignActual },
                 ]}
             >
+                <View style={styles.cajaImagen}>
+                    <Image
+                        source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+                        style={styles.imagen}
+                    />
+                </View>
+
                 <View style={styles.cajaImagen}>
                     <Image
                         source={require('../../assets/images/icon.png')}
@@ -99,14 +110,7 @@ export default function PrincipalScreen() {
 
                 <View style={styles.cajaImagen}>
                     <Image
-                        source={require('../../assets/images/react-logo.png')}
-                        style={styles.imagen}
-                    />
-                </View>
-
-                <View style={styles.cajaImagen}>
-                    <Image
-                        source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+                        source={IMAGENES_LOCALES[indiceImagen]}
                         style={styles.imagen}
                     />
                 </View>
@@ -146,28 +150,17 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         alignItems: 'center',
     },
-    botonActivo: {
-        backgroundColor: '#0d47a1',
-        borderWidth: 1.5,
-        borderColor: '#ffffff',
+    botonSecundario: {
+        backgroundColor: '#9e2a2b',
+        paddingVertical: 8,
+        borderRadius: 4,
+        alignItems: 'center',
+        marginBottom: 12,
     },
     textoBoton: {
         color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 11,
-    },
-    panelEstado: {
-        backgroundColor: '#444444',
-        paddingVertical: 6,
-        paddingHorizontal: 10,
-        borderRadius: 4,
-        marginBottom: 10,
-        alignItems: 'center',
-    },
-    textoEstado: {
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 12,
     },
     escenario: {
         flex: 1,
