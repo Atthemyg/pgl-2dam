@@ -511,3 +511,42 @@ const personas = [{ id: '1', nombre: 'Ana' }, { id: '2', nombre: 'Luis' }];
   ListHeaderComponent={<Text>Lista de personas</Text>}
 />
 ```
+
+---
+
+### Práctica 16. Lista de productos
+
+Sustituid la lista de personas del ejemplo por una lista de productos. Cada elemento mostrará **nombre, precio y stock**. No añadáis separador entre elementos. Utilizad `index` dentro de `renderItem` para alternar el color de fondo entre posiciones pares e impares. La cabecera debe decir «Lista Productos», estar centrada y tener un tamaño mayor.
+
+---
+
+### Práctica 17. Tarjetas para calcular el IMC
+
+Cread un componente `CardPersona.tsx` con los campos `id`, `nombre`, `altura` y `peso` y el cálculo del índice de masa corporal (IMC = peso en kg / altura en metros al cuadrado). La pantalla contenedora tendrá un botón «+» para añadir tarjetas y cada tarjeta dispondrá de un botón para eliminarla.
+
+**Claves de implementación:** el contenedor mantiene un array de identificadores y crea las tarjetas con claves estables; cada tarjeta puede gestionar sus campos locales, mientras que la eliminación se comunica al componente padre mediante una función recibida por props. Validar las cifras evita dividir entre cero.
+
+---
+
+
+## Iconos
+
+**Con Expo utilizaremos `@expo/vector-icons`**, que proporciona familias como Ionicons, MaterialIcons o FontAwesome sin modificar manualmente Gradle.
+
+```tsx
+import { Ionicons } from '@expo/vector-icons';
+<Ionicons name="car-outline" size={40} color="blue" />
+```
+
+Consultad los nombres de iconos en https://icons.expo.fyi/ . El nombre debe existir en la familia elegida; los tipos de TypeScript ayudan a localizar errores de escritura.
+
+---
+
+
+### Elegir la familia correcta de iconos
+
+Cada familia tiene su propio catálogo. Por ejemplo, el icono `car-outline` pertenece a Ionicons y se importa desde `@expo/vector-icons/Ionicons` o como `{ Ionicons }` de `@expo/vector-icons`, según la forma que prefiráis. Las propiedades más habituales son `name`, `size` y `color`.
+
+Las figuras ilustran el aspecto de los iconos, pero la **instalación de fuentes mediante Gradle no se realiza en Expo**. Aseguraos de que los iconos se representan tanto en la práctica como en el emulador.
+
+---
