@@ -7,7 +7,7 @@ import {
     StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import CardPersonaFamilia from './CardPersonaFamilia';
+import CardPersonaFamilia from '../components/CardPersonaFamilia';
 
 export default function ImcScreen() {
     const [ids, setIds] = useState<string[]>(['1']);

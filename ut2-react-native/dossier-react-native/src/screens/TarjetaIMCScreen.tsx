@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from 'react-native';
-import CardPersona from './CardPersona';
+import CardPersona from '../components/CardPersona';
 
 export default function ImcScreen() {
     const [ids, setIds] = useState<string[]>(['1']);

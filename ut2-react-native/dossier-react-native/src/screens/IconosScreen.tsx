@@ -7,8 +7,7 @@ import {
     StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import CardPersonaIconos from './CardPersonaIconos';
-
+import CardPersonaIconos from '../components/CardPersonaIconos';
 export default function ImcScreen() {
     const [ids, setIds] = useState<string[]>(['1']);
     const [contador, setContador] = useState<number>(2);

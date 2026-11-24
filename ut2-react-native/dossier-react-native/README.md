@@ -362,11 +362,15 @@ export default function Index() {
 
 Cada enlace apunta a un archivo real (por ejemplo, `src/app/practica01.tsx` exporta `HolaMundoScreen`) y voy ampliando la lista con cada práctica nueva. No dejo componentes auxiliares sueltos dentro de `src/app/`, porque Expo Router los interpretaría como rutas.
 
+![](./imagenes/practica10-1.png)
+
 ---
 
 ### Práctica 11. Hook personalizado para la calculadora
 
 Extraed de la calculadora las variables de estado y las funciones que no forman parte del JSX a un hook `src/hooks/useCalculadora.ts`. La pantalla importará el hook y utilizará los valores y funciones que este devuelva. Comprobad que la calculadora sigue funcionando.
+
+![](./imagenes/practica11.png)
 
 ---
 
@@ -387,6 +391,8 @@ Alert.alert('Cambiar color', '¿Aplicar el nuevo fondo?', [
 
 El cambio se produce al pulsar «Aceptar»; si se cancela, el estado no se modifica.
 
+![](./imagenes/practica11-1.png)
+
 ---
 
 ### Práctica 12. Color aleatorio con confirmación
@@ -395,6 +401,9 @@ Cread una pantalla con un botón «Cambiar de color». Al pulsarlo elegid aleato
 
 Para solicitar texto dentro de un diálogo en Android, crearemos un componente compatible con Expo en lugar de depender de un paquete nativo de terceros.
 
+![](./imagenes/practica12.png)
+
+![](./imagenes/practica12-1.png)
 
 ---
 
@@ -420,6 +429,10 @@ const [colorEscrito, setColorEscrito] = useState('lightblue');
 
 > Este ejemplo enseña la estructura del diálogo; antes de utilizar el color escrito, comprobad que sea un valor válido. El estado `fondo` se declara en la pantalla como en la práctica 12.
 
+![](./imagenes/practica12-2.png)
+
+![](./imagenes/practica12-3.png)
+
 ---
 
 ### Práctica 13. Introducir el color
@@ -434,11 +447,15 @@ Repetid la práctica 12, pero permitiendo escribir el color mediante el diálogo
 <Switch value={activo} onValueChange={setActivo} thumbColor={activo ? 'orange' : 'brown'} />
 ```
 
+![](./imagenes/practica13.png)
+
 ---
 
 ### Práctica 14. Borde activado por Switch
 
 Reproducid el control de referencia: indicador marrón cuando está desactivado y naranja cuando está activado. Al activarlo, mostrad un borde rojo alrededor de la pantalla; al desactivarlo, quitad el borde.
+
+![](./imagenes/practica14.png)
 
 ---
 
@@ -462,6 +479,10 @@ const [datos, setDatos] = useState<DatosPersona>({
 ```
 
 Mantendremos inicialmente la edad como texto y la convertiremos a número al validarla (`Number(datos.edad)`); así evitamos errores al borrar o editar los caracteres del campo.
+
+![](./imagenes/practica14-1.png)
+
+![](./imagenes/practica14-2.png)
 
 ---
 
