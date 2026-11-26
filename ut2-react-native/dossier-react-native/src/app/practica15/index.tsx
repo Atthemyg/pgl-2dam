@@ -6,6 +6,7 @@ export default function Practica15Menu() {
     <View style={{ flex: 1, padding: 20, gap: 16 }}>
       <Link href="/practica15/CompletarFormulario">Completar Formulario</Link>
       <Link href="/practica15/Listas">Listas</Link>
+      <Link href="/practica15/FlatList">Flat List</Link>
     </View>
   );
 }

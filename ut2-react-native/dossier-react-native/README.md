@@ -482,7 +482,6 @@ Mantendremos inicialmente la edad como texto y la convertiremos a número al val
 
 ![](./imagenes/practica14-1.png)
 
-![](./imagenes/practica14-2.png)
 
 ---
 
@@ -501,11 +500,17 @@ function cambiarCampo<K extends keyof DatosPersona>(campo: K, valor: DatosPerson
 
 Al enviar el formulario, comprobad que el nombre no esté vacío y que la edad pueda convertirse en un número válido. Podéis mostrar los datos mediante una alerta o un resumen en pantalla.
 
+![](./imagenes/practica14-2.png)
+
 ---
 
 ### Práctica 15. Completar el formulario
 
 Reproducid el ejemplo de persona (nombre, edad y jubilación) e **incorporad el `Switch` del campo `casado`**. Los cuatro campos deben actualizar correctamente el estado y mostrarse en un resumen final.
+
+![](./imagenes/practica15.png)
+
+![](./imagenes/practica15-1.png)
 
 ---
 
@@ -513,6 +518,8 @@ Reproducid el ejemplo de persona (nombre, edad y jubilación) e **incorporad el 
 ## Listas
 
 React Native incluye `ScrollView`, `FlatList` y `SectionList`. `ScrollView` es útil con pocos elementos porque renderiza todo su contenido; **`FlatList` virtualiza listas largas**, representando preferentemente los elementos próximos a la zona visible. `SectionList` permite agruparlos por secciones.
+
+![](./imagenes/practica15-2.png)
 
 ### `FlatList`
 
@@ -533,11 +540,15 @@ const personas = [{ id: '1', nombre: 'Ana' }, { id: '2', nombre: 'Luis' }];
 />
 ```
 
+![](./imagenes/practica15-3.png)
+
 ---
 
 ### Práctica 16. Lista de productos
 
 Sustituid la lista de personas del ejemplo por una lista de productos. Cada elemento mostrará **nombre, precio y stock**. No añadáis separador entre elementos. Utilizad `index` dentro de `renderItem` para alternar el color de fondo entre posiciones pares e impares. La cabecera debe decir «Lista Productos», estar centrada y tener un tamaño mayor.
+
+![](./imagenes/practica16.png)
 
 ---
 
@@ -546,6 +557,8 @@ Sustituid la lista de personas del ejemplo por una lista de productos. Cada elem
 Cread un componente `CardPersona.tsx` con los campos `id`, `nombre`, `altura` y `peso` y el cálculo del índice de masa corporal (IMC = peso en kg / altura en metros al cuadrado). La pantalla contenedora tendrá un botón «+» para añadir tarjetas y cada tarjeta dispondrá de un botón para eliminarla.
 
 **Claves de implementación:** el contenedor mantiene un array de identificadores y crea las tarjetas con claves estables; cada tarjeta puede gestionar sus campos locales, mientras que la eliminación se comunica al componente padre mediante una función recibida por props. Validar las cifras evita dividir entre cero.
+
+![](./imagenes/practica17.png)
 
 ---
 
@@ -561,6 +574,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 Consultad los nombres de iconos en https://icons.expo.fyi/ . El nombre debe existir en la familia elegida; los tipos de TypeScript ayudan a localizar errores de escritura.
 
+![](./imagenes/practica17-1.png)
+
 ---
 
 
@@ -570,4 +585,123 @@ Cada familia tiene su propio catálogo. Por ejemplo, el icono `car-outline` pert
 
 Las figuras ilustran el aspecto de los iconos, pero la **instalación de fuentes mediante Gradle no se realiza en Expo**. Aseguraos de que los iconos se representan tanto en la práctica como en el emulador.
 
+![](./imagenes/practica17-2.png)
+
 ---
+
+### Práctica 18. Diario de emociones
+
+Cread una pantalla con `TextInput`, un botón y una zona donde mostrar las entradas del diario. Cada entrada contendrá el texto escrito, la fecha y la hora (incluidos los segundos) y un icono de emoción. Si el texto incluye `:-)`, mostrad un icono sonriente; si incluye `:-(`, un icono triste. Guardad las entradas en un array de estado para que no desaparezcan al añadir otra.
+
+![](./imagenes/practica18.png)
+
+---
+
+### Práctica 19. Insertar emoticonos en el texto
+
+Cread otra pantalla con varios iconos de emociones encima de un `TextInput`. Al pulsar uno de los iconos, añadid la secuencia de texto correspondiente (por ejemplo, `:-)` o `:-(`) al final del contenido del campo. Utilizad `setTexto(actual => actual + ' :-)')` y mantened el campo controlado.
+
+![](./imagenes/practica19.png)
+
+---
+
+
+## Navegación en React Native
+
+En aplicaciones móviles es habitual utilizar tres patrones: **Stack**, donde una pantalla abre otra y es posible volver; **Drawer**, un menú lateral; y **Tabs**, pestañas para cambiar entre apartados.
+
+En nuestro proyecto Expo usaremos **Expo Router**, que incorpora navegación basada en archivos y permite definir estos tres patrones sin crear un `NavigationContainer` en `App.tsx`.
+
+La ruta `src/app/practica01.tsx` corresponde a `/practica01`. Para navegar se utiliza `<Link href="/practica01">...</Link>` o `router.push('/practica01')`. Cuando una práctica necesite varias pantallas, añadiremos un directorio específico con archivos para cada ruta.
+
+**Regla del dossier:** mantendréis `src/app/index.tsx` como índice de prácticas. Las navegaciones particulares no sustituirán el índice general ni modificarán las rutas de otros ejercicios.
+
+---
+
+
+### Estructura de navegación
+
+Un ejemplo de rutas para un ejercicio de navegación Stack es:
+
+```text
+src/app/
+├── _layout.tsx
+├── index.tsx
+└── stack/
+    └── p20/
+        ├── _layout.tsx
+        ├── index.tsx
+        └── detalle.tsx
+```
+
+`_layout.tsx` establece el navegador que comparten las pantallas de esa carpeta. En la raíz de la aplicación podemos utilizar un `Stack` que incluya el índice y las rutas de prácticas:
+
+```tsx
+// src/app/_layout.tsx
+import { Stack } from 'expo-router';
+export default function RootLayout() {
+  return <Stack screenOptions={{ headerShown: false }} />;
+}
+```
+
+No es necesario configurar manualmente `MainActivity.java`, el `AndroidManifest.xml` ni Gradle para mostrar estas pantallas en Expo Go.
+
+---
+
+
+### Stack Navigation
+
+Un navegador Stack mantiene una pila de pantallas. Cuando abrimos otra pantalla mediante `router.push`, esta se coloca encima de la anterior; con `router.back()` regresamos cuando existe una pantalla previa. Expo Router utiliza `Stack` para configurar este comportamiento.
+
+```tsx
+// src/app/stack/p20/_layout.tsx
+import { Stack } from 'expo-router';
+export default function Layout() {
+  return <Stack><Stack.Screen name="index" options={{ title: 'Inicio' }} />
+                <Stack.Screen name="detalle" options={{ title: 'Detalle' }} /></Stack>;
+}
+```
+
+En `index.tsx` podéis utilizar `<Link href="/stack/p20/detalle">Ir a detalle</Link>`; en `detalle.tsx` mostrad un texto y utilizad `router.back()` para regresar. Los archivos forman parte del mismo proyecto Expo.
+
+---
+
+### Práctica 20. Primer Stack
+
+Cread una aplicación de ejemplo con una pantalla **HomeScreen** que permita navegar a una segunda pantalla y regresar. Organizad ambas dentro de `src/app/stack/p20/` e incluid un enlace a `/stack/p20` desde el índice general de prácticas.
+
+**Comprobad:** al abrir el ejercicio, la cabecera muestra el título elegido; al pulsar el control se abre la siguiente pantalla; la acción de volver regresa al origen. No debéis modificar `src/app/index.tsx` para convertirlo en HomeScreen.
+
+---
+
+
+### Cambiar de pantalla y pasar parámetros
+
+Con Expo Router utilizaremos `router.push` para navegar y podremos pasar parámetros mediante el objeto `params` o una ruta válida:
+
+```tsx
+import { router } from 'expo-router';
+router.push({ pathname: '/stack/p21/tercera', params: { userName: 'Aquilino' } });
+```
+
+En la pantalla de destino recuperamos el dato mediante `useLocalSearchParams`:
+
+```tsx
+import { useLocalSearchParams } from 'expo-router';
+const { userName } = useLocalSearchParams<{ userName?: string }>();
+// <Text>Hola, {userName ?? 'invitado'}</Text>
+```
+
+Los parámetros de ruta se reciben como texto (o conjuntos de textos); si necesitáis números, convertidlos de manera explícita.
+
+---
+
+
+### Tipado de rutas y pantallas
+
+TypeScript ayuda a detectar errores al nombrar rutas y parámetros. Expo Router genera tipos para las rutas del proyecto, . No es necesario definir un `RootStackParamList` manual para estas rutas.
+
+Organizad el ejercicio en `src/app/stack/p21/` con tres archivos de pantalla (`index.tsx`, `segunda.tsx`, `tercera.tsx`) y un `_layout.tsx` de Stack. En la tercera pantalla deberá mostrarse el valor `userName` recibido.
+
+---
+

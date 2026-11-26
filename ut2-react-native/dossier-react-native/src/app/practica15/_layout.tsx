@@ -6,6 +6,7 @@ export default function Practica15Layout() {
       <Stack.Screen name="index" options={{ title: 'Práctica 15 - Apartados' }} />
       <Stack.Screen name="CompletarFormulario" options={{ title: 'Completar Formulario' }} />
       <Stack.Screen name="Listas" options={{ title: 'Listas' }} />
+      <Stack.Screen name="FlatList" options={{ title: 'Flat List' }} />
     </Stack>
   );
 }
