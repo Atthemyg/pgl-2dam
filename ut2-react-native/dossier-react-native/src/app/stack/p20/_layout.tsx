@@ -1,10 +1,27 @@
+import React from 'react';
 import { Stack } from 'expo-router';
 
-export default function Practica20Layout() {
-  return (
-    <Stack>
-      <Stack.Screen name="index" options={{ title: 'Práctica 20 - Primer Stack' }} />
-      <Stack.Screen name="PrimerStack" options={{ title: 'PrimerStack' }} />
-    </Stack>
-  );
+export default function P20StackLayout() {
+    return (
+        <Stack
+            screenOptions={{
+                headerStyle: { backgroundColor: '#198754' },
+                headerTintColor: '#ffffff',
+                headerTitleStyle: { fontWeight: 'bold' },
+            }}
+        >
+            <Stack.Screen
+                name="index"
+                options={{ title: 'Inicio - Primer Stack' }}
+            />
+            <Stack.Screen
+                name="Profile"
+                options={{ title: 'Segunda Pantalla' }}
+            />
+            <Stack.Screen
+                name="CambiarPantalla"
+                options={{ title: 'Cambiar Pantalla' }}
+            />
+        </Stack>
+    );
 }

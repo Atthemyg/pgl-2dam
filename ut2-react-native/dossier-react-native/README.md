@@ -672,6 +672,11 @@ Cread una aplicación de ejemplo con una pantalla **HomeScreen** que permita nav
 
 **Comprobad:** al abrir el ejercicio, la cabecera muestra el título elegido; al pulsar el control se abre la siguiente pantalla; la acción de volver regresa al origen. No debéis modificar `src/app/index.tsx` para convertirlo en HomeScreen.
 
+
+![](./imagenes/practica20-1.png)
+
+![](./imagenes/practica20.png)
+
 ---
 
 
@@ -693,6 +698,10 @@ const { userName } = useLocalSearchParams<{ userName?: string }>();
 ```
 
 Los parámetros de ruta se reciben como texto (o conjuntos de textos); si necesitáis números, convertidlos de manera explícita.
+
+![](./imagenes/practica20-2.png)
+
+![](./imagenes/practica20-3.png)
 
 ---
 

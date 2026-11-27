@@ -22,6 +22,7 @@ export default function Index() {
       <Link href="/practica17">Práctica 17</Link>
       <Link href="/practica18">Práctica 18</Link>
       <Link href="/practica19">Práctica 19</Link>
+      <Link href="/stack/p20">Práctica 20</Link>
     </ScrollView>
   );
 }
